@@ -521,9 +521,12 @@ class TerritoryPicker
                 label: "United Kingdom of Great Britain"
 
   constructor: (@container, @options) ->
-    #@container.append @territory_options({world: {label: 'World'}})
     @container.append @territory_options(@defaults.territories)
-
+    @container.delegate 'input', 'change', (event) =>
+      check = $(event.target).is(':checked')
+      @all_child_territories( $(event.target) ).prop('checked', check)
+      @all_parent_territories( $(event.target) ).each (index, checkbox) =>
+        @set_based_on_child_territories( $(checkbox) )
 
   territory_options: (territories_data) ->
     result = $('<ul class="territory_options"></ul>')
@@ -538,17 +541,26 @@ class TerritoryPicker
    
     result
 
+  territory_option: (territory_code, territory_label, options) ->
+    option = $('<li></li>')
+    option.append( @territory_checkbox(territory_code, options) )
+    option.append( @territory_label(territory_code, territory_label, options) )
+    option
+
   territory_checkbox: (territory_code, options) ->
     $('<input id="territory_'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
 
   territory_label: (territory_code, territory_label, options) ->
     $('<label id="territory_'+territory_code+'_name" for="territory_'+territory_code+'">'+territory_label+'</label>')
 
-  territory_option: (territory_code, territory_label, options) ->
-    option = $('<li></li>')
-    option.append( @territory_checkbox(territory_code, options) )
-    option.append( @territory_label(territory_code, territory_label, options) )
-    option
+  all_child_territories: (checkbox) ->
+    checkbox.siblings('ul.territory_options').find('input').attr('checked', 'checked')
+
+  all_parent_territories: (checkbox) ->
+    checkbox.parents('ul.territory_options').siblings('input')
+
+  set_based_on_child_territories: (checkbox) ->
+    checkbox.prop('checked', @all_child_territories(checkbox).filter(':not(:checked)').length <= 0)
 
 jQuery ->
   $.territoryPicker = ( element, options ) ->
