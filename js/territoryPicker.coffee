@@ -517,8 +517,6 @@ class TerritoryPicker
           gb:
             label: "United Kingdom of Great Britain"
 
-
-
   constructor: (@container, @options) ->
     @container.append @territory_options({world: {label: 'World'}})
     @container.append @territory_options(@defaults.territories)
@@ -527,13 +525,8 @@ class TerritoryPicker
     result = $('<ul class="territory_options"></ul>')
 
     $.each territories_data, (territory_code, territory_data) =>
-      result.append @territory_option(territory_code, territory_data.label)
+      result.append @territory_group(territory_code, territory_data)
       
-      if territory_data.territories
-        sub = $('<li></li>')
-        sub.append @territory_options(territory_data.territories)
-        result.append sub
-
     result
 
   territory_checkbox: (territory_code, options) ->
@@ -547,6 +540,20 @@ class TerritoryPicker
     option.append( @territory_checkbox(territory_code, options) )
     option.append( @territory_label(territory_code, territory_label, options) )
     option
+
+  territory_group: (territory_code, territory_data) ->
+    result = $('<ul class="territory_options"></ul>')
+    result.append( @territory_option(territory_code, territory_data.label) )
+
+    if territory_data.territories
+      sub = $('<li></li>')
+      sub.append @territory_options(territory_data.territories)
+      result.append sub
+
+    result
+
+
+
 
 
 jQuery ->

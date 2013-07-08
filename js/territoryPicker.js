@@ -786,13 +786,7 @@
         _this = this;
       result = $('<ul class="territory_options"></ul>');
       $.each(territories_data, function(territory_code, territory_data) {
-        var sub;
-        result.append(_this.territory_option(territory_code, territory_data.label));
-        if (territory_data.territories) {
-          sub = $('<li></li>');
-          sub.append(_this.territory_options(territory_data.territories));
-          return result.append(sub);
-        }
+        return result.append(_this.territory_group(territory_code, territory_data));
       });
       return result;
     };
@@ -811,6 +805,18 @@
       option.append(this.territory_checkbox(territory_code, options));
       option.append(this.territory_label(territory_code, territory_label, options));
       return option;
+    };
+
+    TerritoryPicker.prototype.territory_group = function(territory_code, territory_data) {
+      var result, sub;
+      result = $('<ul class="territory_options"></ul>');
+      result.append(this.territory_option(territory_code, territory_data.label));
+      if (territory_data.territories) {
+        sub = $('<li></li>');
+        sub.append(this.territory_options(territory_data.territories));
+        result.append(sub);
+      }
+      return result;
     };
 
     return TerritoryPicker;
