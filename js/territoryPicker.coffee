@@ -555,7 +555,7 @@ class TerritoryPicker
     option
 
   territory_checkbox: (territory_code, options) ->
-    $('<input id="territory_'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
+    $('<input id="territory_'+territory_code+'" value="'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
 
   territory_label: (territory_code, territory_label, options) ->
     $('<label id="territory_'+territory_code+'_name" for="territory_'+territory_code+'">'+territory_label+'</label>')
@@ -571,6 +571,14 @@ class TerritoryPicker
 
   set_based_on_child_territories: (checkbox) ->
     checkbox.prop('checked', @all_child_territories(checkbox).filter(':not(:checked)').length <= 0)
+
+  all_checked_territory_codes: ->
+    return @container.find('input:checked').map ->
+      $(this).val()
+
+  checked_territory_codes: ->
+    ['TODO']
+
 
 jQuery ->
   $.territoryPicker = ( element, options ) ->
@@ -602,10 +610,15 @@ jQuery ->
     @init = ->
       @settings = $.extend( {}, @defaults, options )
 
-      @territory_picker = new TerritoryPicker(@$element, @settings)
+      @territoryPicker = new TerritoryPicker(@$element, @settings)
 
       @setState 'ready'
 
+    @all_checked_territory_codes = ->
+      return @territoryPicker.all_checked_territory_codes()
+
+    @checked_territory_codes = ->
+      return @territoryPicker.checked_territory_codes()
 
     # initialise the plugin
     @init()
@@ -622,3 +635,4 @@ jQuery ->
       if $( this ).data( 'territoryPicker' ) is undefined
         plugin = new $.territoryPicker( this, options )
         $( this).data( 'territoryPicker', plugin )
+

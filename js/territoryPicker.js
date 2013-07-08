@@ -817,7 +817,7 @@
     };
 
     TerritoryPicker.prototype.territory_checkbox = function(territory_code, options) {
-      return $('<input id="territory_' + territory_code + '" type="checkbox" name="territories[' + territory_code + ']" checked="checked" />');
+      return $('<input id="territory_' + territory_code + '" value="' + territory_code + '" type="checkbox" name="territories[' + territory_code + ']" checked="checked" />');
     };
 
     TerritoryPicker.prototype.territory_label = function(territory_code, territory_label, options) {
@@ -838,6 +838,16 @@
 
     TerritoryPicker.prototype.set_based_on_child_territories = function(checkbox) {
       return checkbox.prop('checked', this.all_child_territories(checkbox).filter(':not(:checked)').length <= 0);
+    };
+
+    TerritoryPicker.prototype.all_checked_territory_codes = function() {
+      return this.container.find('input:checked').map(function() {
+        return $(this).val();
+      });
+    };
+
+    TerritoryPicker.prototype.checked_territory_codes = function() {
+      return ['TODO'];
     };
 
     return TerritoryPicker;
@@ -868,8 +878,14 @@
       this.$element = $(element);
       this.init = function() {
         this.settings = $.extend({}, this.defaults, options);
-        this.territory_picker = new TerritoryPicker(this.$element, this.settings);
+        this.territoryPicker = new TerritoryPicker(this.$element, this.settings);
         return this.setState('ready');
+      };
+      this.all_checked_territory_codes = function() {
+        return this.territoryPicker.all_checked_territory_codes();
+      };
+      this.checked_territory_codes = function() {
+        return this.territoryPicker.checked_territory_codes();
       };
       this.init();
       return this;

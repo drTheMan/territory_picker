@@ -345,4 +345,18 @@ describe 'TerritoryPicker', ->
       # verify that ALL territories are checked again
       expect( @$element.find('input:checked').length ).toBe(252)
 
-        
+  describe 'data interface', ->
+    beforeEach ->
+      @$element.territoryPicker()
+
+    it 'should have a all_checked_territory_codes function', ->
+      # uncheck all
+      @$element.find('input[name="territories[world]"]').trigger('click')
+      # check belgium
+      @$element.find('input[name="territories[be]"]').trigger('click')
+      # verify
+      expect( @$element.data('territoryPicker').all_checked_territory_codes() ).toBe( ['be'] )
+
+    #it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
+    #  expect( @$element.data('territoryPicker').checked_territory_codes() ).toBe( ['world'] )
+

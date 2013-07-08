@@ -322,7 +322,7 @@
         });
       });
     });
-    return describe('events', function() {
+    describe('events', function() {
       beforeEach(function() {
         return new $.territoryPicker(this.$element);
       });
@@ -341,6 +341,16 @@
         expect(this.$element.find('input:checked').length).toBe(249);
         this.$element.find('input[name="territories[nl]"]').trigger('click');
         return expect(this.$element.find('input:checked').length).toBe(252);
+      });
+    });
+    return describe('data interface', function() {
+      beforeEach(function() {
+        return this.$element.territoryPicker();
+      });
+      return it('should have a all_checked_territory_codes function', function() {
+        this.$element.find('input[name="territories[world]"]').trigger('click');
+        this.$element.find('input[name="territories[be]"]').trigger('click');
+        return expect(this.$element.data('territoryPicker').all_checked_territory_codes()).toBe(['be']);
       });
     });
   });
