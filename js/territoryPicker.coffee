@@ -7,18 +7,30 @@
 #
 
 class TerritoryPicker
+  defaults:
+    territories:
+      africa:
+        label: 'Africa'
+        territories:
+          dz:
+            label: 'Algeria'
+
   constructor: (@container, @options) ->
-    @container.append( @territory_option('world', 'World') )
-    @container.append(@territory_options())
+    @container.append @territory_options({world: {label: 'World'}})
+    @container.append @territory_options(@defaults.territories)
 
-  territory_options: ->
-    unless @$territory_options
-      @$territory_options = $('<ul class="territory_groups"></ul>')
-      africa_group = $('<li id="territory_group_africa"></li>')
-      africa_group.append @territory_option('africa', 'Africa')
-      @$territory_options.append africa_group
+  territory_options: (territories_data) ->
+    result = $('<ul class="territory_options"></ul>')
 
-    @$territory_options
+    $.each territories_data, (territory_code, territory_data) =>
+      result.append @territory_option(territory_code, territory_data.label)
+      
+      if territory_data.territories
+        sub = $('<li></li>')
+        sub.append @territory_options(territory_data.territories)
+        result.append sub
+
+    result
 
   territory_checkbox: (territory_code, options) ->
     $('<input id="territory_'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
@@ -27,7 +39,7 @@ class TerritoryPicker
     $('<label id="territory_'+territory_code+'_name" for="territory_'+territory_code+'">'+territory_label+'</label>')
 
   territory_option: (territory_code, territory_label, options) ->
-    option = $('<div class="territory_option"></div>')
+    option = $('<li></li>')
     option.append( @territory_checkbox(territory_code, options) )
     option.append( @territory_label(territory_code, territory_label, options) )
     option

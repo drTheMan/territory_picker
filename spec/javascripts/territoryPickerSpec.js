@@ -61,9 +61,11 @@
         });
         return it('should generate the Africa territory group', function() {
           var africa_group;
-          expect(africa_group = $('li#territory_group_africa')).toExist();
+          expect(africa_group = this.$element.find('ul.territory_options:eq(1)')).toExist();
           expect(africa_group.find('input[name="territories[africa]"]')).toBeChecked();
-          return expect(africa_group.find('label[for="territory_africa"]').html()).toBe('Africa');
+          expect(africa_group.find('label[for="territory_africa"]').html()).toBe('Africa');
+          expect(africa_group.find('input[name="territories[dz]"]')).toBeChecked();
+          return expect(africa_group.find('label[for="territory_dz"]').html()).toBe('Algeria');
         });
       });
     });
