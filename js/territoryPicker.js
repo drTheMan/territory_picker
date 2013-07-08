@@ -1,6 +1,6 @@
 (function() {
   jQuery(function() {
-    $.pluginName = function(element, options) {
+    $.territoryPicker = function(element, options) {
       var state;
       state = '';
       this.settings = {};
@@ -27,15 +27,15 @@
       this.init();
       return this;
     };
-    $.pluginName.prototype.defaults = {
+    $.territoryPicker.prototype.defaults = {
       message: 'Hello world'
     };
-    return $.fn.pluginName = function(options) {
+    return $.fn.territoryPicker = function(options) {
       return this.each(function() {
         var plugin;
-        if ($(this).data('pluginName') === void 0) {
-          plugin = new $.pluginName(this, options);
-          return $(this).data('pluginName', plugin);
+        if ($(this).data('territoryPicker') === void 0) {
+          plugin = new $.territoryPicker(this, options);
+          return $(this).data('territoryPicker', plugin);
         }
       });
     };

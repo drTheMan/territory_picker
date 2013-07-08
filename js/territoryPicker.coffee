@@ -7,7 +7,7 @@
 #
 
 jQuery ->
-  $.pluginName = ( element, options ) ->
+  $.territoryPicker = ( element, options ) ->
     # current state
     state = ''
 
@@ -43,11 +43,11 @@ jQuery ->
     this
 
   # default plugin settings
-  $.pluginName::defaults =
+  $.territoryPicker::defaults =
       message: 'Hello world'  # option description
 
-  $.fn.pluginName = ( options ) ->
+  $.fn.territoryPicker = ( options ) ->
     this.each ->
-      if $( this ).data( 'pluginName' ) is undefined
-        plugin = new $.pluginName( this, options )
-        $( this).data( 'pluginName', plugin )
+      if $( this ).data( 'territoryPicker' ) is undefined
+        plugin = new $.territoryPicker( this, options )
+        $( this).data( 'territoryPicker', plugin )

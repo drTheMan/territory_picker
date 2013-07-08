@@ -1,6 +1,6 @@
 {
-  "name"            : "pluginName",
-  "title"           : "Plugin Name",
+  "name"            : "territoryPicker",
+  "title"           : "Territory Picker",
   "version"         : "0.1.0",
   "description" : "",
   "keywords": [],
@@ -12,11 +12,11 @@
   },
   "repository" : {
     "type" : "git",
-    "url"  : "git://github.com/<github-username>/<pluginName>.git"
+    "url"  : "git://github.com/<github-username>/<territoryPicker>.git"
   },
   "bugs" : {
-    "url" : "https://github.com/<github-username>/<pluginName>/issues",
-    "url": "https://github.com/<github-username>/<pluginName>/blob/master/LICENSE-MIT"
+    "url" : "https://github.com/<github-username>/<territoryPicker>/issues",
+    "url": "https://github.com/<github-username>/<territoryPicker>/blob/master/LICENSE-MIT"
   },
   "licenses": [{
     "type": "MIT"

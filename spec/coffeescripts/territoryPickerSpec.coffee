@@ -1,4 +1,4 @@
-describe 'PluginName', ->
+describe 'TerritoryPicker', ->
   options =
     message: 'Hello World'
 
@@ -8,24 +8,24 @@ describe 'PluginName', ->
 
   describe 'plugin behavior', ->
     it 'should be available on the jQuery object', ->
-      expect( $.fn.pluginName ).toBeDefined()
+      expect( $.fn.territoryPicker ).toBeDefined()
 
     it 'should be chainable', ->
-      expect( @$element.pluginName() ).toBe @$element
+      expect( @$element.territoryPicker() ).toBe @$element
 
     it 'should offers default values', ->
-      plugin = new $.pluginName( @$element )
+      plugin = new $.territoryPicker( @$element )
 
       expect( plugin.defaults ).toBeDefined()
 
     it 'should overwrites the settings', ->
-      plugin = new $.pluginName( @$element, options )
+      plugin = new $.territoryPicker( @$element, options )
 
       expect( plugin.settings.message ).toBe( options.message )
 
   describe 'plugin state', ->
     beforeEach ->
-      @plugin = new $.pluginName( @$element )
+      @plugin = new $.territoryPicker( @$element )
 
     it 'should have a ready state', ->
       expect( @plugin.getState() ).toBe 'ready'
