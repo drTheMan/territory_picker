@@ -1,44 +1,13 @@
 describe 'TerritoryPicker', ->
-  options =
-    message: 'Hello World'
+  options = {}
 
   beforeEach ->
     loadFixtures 'fragment.html'
     @$element = $( '#fixtures' )
-
-  describe 'plugin behavior', ->
-    it 'should be available on the jQuery object', ->
-      expect( $.fn.territoryPicker ).toBeDefined()
-
-    it 'should be chainable', ->
-      expect( @$element.territoryPicker() ).toBe @$element
-
-    it 'should offers default values', ->
-      plugin = new $.territoryPicker( @$element )
-
-      expect( plugin.defaults ).toBeDefined()
-
-    it 'should overwrites the settings', ->
-      plugin = new $.territoryPicker( @$element, options )
-
-      expect( plugin.settings.message ).toBe( options.message )
-
-  describe 'plugin state', ->
-    beforeEach ->
-      @plugin = new $.territoryPicker( @$element )
-
-    it 'should have a ready state', ->
-      expect( @plugin.getState() ).toBe 'ready'
-
-    it 'should be updatable', ->
-      @plugin.setState( 'new state' )
-
-      expect( @plugin.getState() ).toBe 'new state'
+    @$element.territoryPicker()
 
   describe 'initialization', ->
     describe 'worldwide option', ->
-      beforeEach ->
-        new $.territoryPicker( @$element )
 
       it 'should generate a \'worldwide?\' checkbox', ->
         expect( $( 'input#territory_world' ) ).toExist()
@@ -52,8 +21,6 @@ describe 'TerritoryPicker', ->
         expect( $( 'label#territory_world_name' ).html() ).toBe('World')
 
     describe 'default territory options', ->
-      beforeEach ->
-        new $.territoryPicker( @$element )
 
       it 'should generate these default options', ->
         territories =
@@ -314,8 +281,6 @@ describe 'TerritoryPicker', ->
           expect( @$element.find('label[for="territory_'+code+'"]').html() ).toBe( label )
 
   describe 'events', ->
-    beforeEach ->
-      new $.territoryPicker( @$element )
 
     it 'should auto check/uncheck all child territories', ->
       # verify number of input control in total
@@ -346,8 +311,6 @@ describe 'TerritoryPicker', ->
       expect( @$element.find('input:checked').length ).toBe(252)
 
   describe 'data interface', ->
-    beforeEach ->
-      @$element.territoryPicker()
 
     it 'should have a all_checked_territory_codes function', ->
       # uncheck all
@@ -355,7 +318,7 @@ describe 'TerritoryPicker', ->
       # check belgium
       @$element.find('input[name="territories[be]"]').trigger('click')
       # verify
-      expect( @$element.data('territoryPicker').all_checked_territory_codes() ).toBe( ['be'] )
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toBe( ['be'] )
 
     #it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
     #  expect( @$element.data('territoryPicker').checked_territory_codes() ).toBe( ['world'] )

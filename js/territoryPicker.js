@@ -1,7 +1,13 @@
 (function() {
-  var TerritoryPicker;
+  var $, TerritoryPicker, root;
+
+  root = this;
+
+  $ = jQuery;
 
   TerritoryPicker = (function() {
+    function TerritoryPicker() {}
+
     TerritoryPicker.prototype.defaults = {
       territories: {
         world: {
@@ -775,73 +781,67 @@
       }
     };
 
-    function TerritoryPicker(container, options) {
+    TerritoryPicker.prototype._create = function() {
       var _this = this;
-      this.container = container;
-      this.options = options;
-      this.container.append(this.territory_options(this.defaults.territories));
-      this.container.delegate('input', 'change', function(event) {
+      this.element.append(this._territory_options(this.defaults.territories));
+      return this.element.delegate('input', 'change', function(event) {
         var check, current_checkbox, _results;
         check = $(event.target).is(':checked');
-        _this.all_child_territories($(event.target)).prop('checked', check);
+        _this._all_child_territories($(event.target)).prop('checked', check);
         current_checkbox = $(event.target);
         _results = [];
-        while ((current_checkbox = _this.direct_parent_territory(current_checkbox)).length > 0) {
-          _results.push(_this.set_based_on_child_territories(current_checkbox));
+        while ((current_checkbox = _this._direct_parent_territory(current_checkbox)).length > 0) {
+          _results.push(_this._set_based_on_child_territories(current_checkbox));
         }
         return _results;
       });
-    }
+    };
 
-    TerritoryPicker.prototype.territory_options = function(territories_data) {
+    TerritoryPicker.prototype._territory_options = function(territories_data) {
       var result,
         _this = this;
       result = $('<ul class="territory_options"></ul>');
       $.each(territories_data, function(territory_code, territory_data) {
         var option;
-        option = _this.territory_option(territory_code, territory_data.label);
+        option = _this._territory_option(territory_code, territory_data.label);
         if (territory_data.territories) {
-          option.append(_this.territory_options(territory_data.territories));
+          option.append(_this._territory_options(territory_data.territories));
         }
         return result.append(option);
       });
       return result;
     };
 
-    TerritoryPicker.prototype.territory_option = function(territory_code, territory_label, options) {
+    TerritoryPicker.prototype._territory_option = function(territory_code, territory_label, options) {
       var option;
       option = $('<li></li>');
-      option.append(this.territory_checkbox(territory_code, options));
-      option.append(this.territory_label(territory_code, territory_label, options));
+      option.append(this._territory_checkbox(territory_code, options));
+      option.append(this._territory_label(territory_code, territory_label, options));
       return option;
     };
 
-    TerritoryPicker.prototype.territory_checkbox = function(territory_code, options) {
+    TerritoryPicker.prototype._territory_checkbox = function(territory_code, options) {
       return $('<input id="territory_' + territory_code + '" value="' + territory_code + '" type="checkbox" name="territories[' + territory_code + ']" checked="checked" />');
     };
 
-    TerritoryPicker.prototype.territory_label = function(territory_code, territory_label, options) {
+    TerritoryPicker.prototype._territory_label = function(territory_code, territory_label, options) {
       return $('<label id="territory_' + territory_code + '_name" for="territory_' + territory_code + '">' + territory_label + '</label>');
     };
 
-    TerritoryPicker.prototype.all_child_territories = function(checkbox) {
+    TerritoryPicker.prototype._all_child_territories = function(checkbox) {
       return checkbox.siblings('ul.territory_options').find('input').attr('checked', 'checked');
     };
 
-    TerritoryPicker.prototype.all_parent_territories = function(checkbox) {
-      return checkbox.parents('ul.territory_options').siblings('input');
-    };
-
-    TerritoryPicker.prototype.direct_parent_territory = function(checkbox) {
+    TerritoryPicker.prototype._direct_parent_territory = function(checkbox) {
       return checkbox.parent().parent().siblings('input');
     };
 
-    TerritoryPicker.prototype.set_based_on_child_territories = function(checkbox) {
-      return checkbox.prop('checked', this.all_child_territories(checkbox).filter(':not(:checked)').length <= 0);
+    TerritoryPicker.prototype._set_based_on_child_territories = function(checkbox) {
+      return checkbox.prop('checked', this._all_child_territories(checkbox).filter(':not(:checked)').length <= 0);
     };
 
     TerritoryPicker.prototype.all_checked_territory_codes = function() {
-      return this.container.find('input:checked').map(function() {
+      return this.element.find('input:checked').map(function() {
         return $(this).val();
       });
     };
@@ -854,54 +854,6 @@
 
   })();
 
-  jQuery(function() {
-    $.territoryPicker = function(element, options) {
-      var state;
-      state = '';
-      this.settings = {};
-      this.$element = $(element);
-      this.setState = function(_state) {
-        return state = _state;
-      };
-      this.getState = function() {
-        return state;
-      };
-      this.getSetting = function(key) {
-        return this.settings[key];
-      };
-      this.callSettingFunction = function(name, args) {
-        if (args == null) {
-          args = [];
-        }
-        return this.settings[name].apply(this, args);
-      };
-      this.$element = $(element);
-      this.init = function() {
-        this.settings = $.extend({}, this.defaults, options);
-        this.territoryPicker = new TerritoryPicker(this.$element, this.settings);
-        return this.setState('ready');
-      };
-      this.all_checked_territory_codes = function() {
-        return this.territoryPicker.all_checked_territory_codes();
-      };
-      this.checked_territory_codes = function() {
-        return this.territoryPicker.checked_territory_codes();
-      };
-      this.init();
-      return this;
-    };
-    $.territoryPicker.prototype.defaults = {
-      message: 'Hello world'
-    };
-    return $.fn.territoryPicker = function(options) {
-      return this.each(function() {
-        var plugin;
-        if ($(this).data('territoryPicker') === void 0) {
-          plugin = new $.territoryPicker(this, options);
-          return $(this).data('territoryPicker', plugin);
-        }
-      });
-    };
-  });
+  $.widget('fuga.territoryPicker', new TerritoryPicker);
 
 }).call(this);

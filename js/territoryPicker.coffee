@@ -6,6 +6,9 @@
 # Website : <website url>
 #
 
+root = this
+$ = jQuery
+
 class TerritoryPicker
   defaults:
     territories:
@@ -520,119 +523,67 @@ class TerritoryPicker
               gb:
                 label: "United Kingdom of Great Britain"
 
-  constructor: (@container, @options) ->
+  _create: ->
     # append default territory options
-    @container.append @territory_options(@defaults.territories)
+    @element.append @_territory_options(@defaults.territories)
 
     # attech change event listener to all territories
-    @container.delegate 'input', 'change', (event) =>
+    @element.delegate 'input', 'change', (event) =>
       # when a territory is changed, all child-territories change with it
       check = $(event.target).is(':checked')
-      @all_child_territories( $(event.target) ).prop('checked', check)
+      @_all_child_territories( $(event.target) ).prop('checked', check)
 
       # when a territory is changed, all parents should be updated (in order!)
       current_checkbox = $(event.target)
-      while((current_checkbox = @direct_parent_territory(current_checkbox)).length > 0)
-        @set_based_on_child_territories( current_checkbox )
+      while((current_checkbox = @_direct_parent_territory(current_checkbox)).length > 0)
+        @_set_based_on_child_territories( current_checkbox )
 
-  territory_options: (territories_data) ->
+  _territory_options: (territories_data) ->
     result = $('<ul class="territory_options"></ul>')
 
     $.each territories_data, (territory_code, territory_data) =>
-      option = @territory_option(territory_code, territory_data.label)
+      option = @_territory_option(territory_code, territory_data.label)
 
       if territory_data.territories
-        option.append @territory_options(territory_data.territories)
+        option.append @_territory_options(territory_data.territories)
 
       result.append option
    
     result
 
-  territory_option: (territory_code, territory_label, options) ->
+  _territory_option: (territory_code, territory_label, options) ->
     option = $('<li></li>')
-    option.append( @territory_checkbox(territory_code, options) )
-    option.append( @territory_label(territory_code, territory_label, options) )
+    option.append( @_territory_checkbox(territory_code, options) )
+    option.append( @_territory_label(territory_code, territory_label, options) )
     option
 
-  territory_checkbox: (territory_code, options) ->
+  _territory_checkbox: (territory_code, options) ->
     $('<input id="territory_'+territory_code+'" value="'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
 
-  territory_label: (territory_code, territory_label, options) ->
+  _territory_label: (territory_code, territory_label, options) ->
     $('<label id="territory_'+territory_code+'_name" for="territory_'+territory_code+'">'+territory_label+'</label>')
 
-  all_child_territories: (checkbox) ->
+  _all_child_territories: (checkbox) ->
     checkbox.siblings('ul.territory_options').find('input').attr('checked', 'checked')
 
-  all_parent_territories: (checkbox) ->
-    checkbox.parents('ul.territory_options').siblings('input')
+  # _all_parent_territories: (checkbox) ->
+  #   checkbox.parents('ul.territory_options').siblings('input')
 
-  direct_parent_territory: (checkbox) ->
+  _direct_parent_territory: (checkbox) ->
     checkbox.parent().parent().siblings('input')
 
-  set_based_on_child_territories: (checkbox) ->
-    checkbox.prop('checked', @all_child_territories(checkbox).filter(':not(:checked)').length <= 0)
+  _set_based_on_child_territories: (checkbox) ->
+    checkbox.prop('checked', @_all_child_territories(checkbox).filter(':not(:checked)').length <= 0)
 
   all_checked_territory_codes: ->
-    return @container.find('input:checked').map ->
+    return @element.find('input:checked').map ->
       $(this).val()
 
   checked_territory_codes: ->
     ['TODO']
 
+# register jquery widget
+$.widget 'fuga.territoryPicker', new TerritoryPicker
 
-jQuery ->
-  $.territoryPicker = ( element, options ) ->
-    # current state
-    state = ''
 
-    # plugin settings
-    @settings = {}
-
-    # jQuery version of DOM element attached to the plugin
-    @$element = $ element
-
-    # set current state
-    @setState = ( _state ) -> state = _state
-
-    #get current state
-    @getState = -> state
-
-    # get particular plugin setting
-    @getSetting = ( key ) ->
-      @settings[ key ]
-
-    # call one of the plugin setting functions
-    @callSettingFunction = ( name, args = [] ) ->
-      @settings[name].apply( this, args )
-
-    @$element = $ element
-
-    @init = ->
-      @settings = $.extend( {}, @defaults, options )
-
-      @territoryPicker = new TerritoryPicker(@$element, @settings)
-
-      @setState 'ready'
-
-    @all_checked_territory_codes = ->
-      return @territoryPicker.all_checked_territory_codes()
-
-    @checked_territory_codes = ->
-      return @territoryPicker.checked_territory_codes()
-
-    # initialise the plugin
-    @init()
-
-    # make the plugin chainable
-    this
-
-  # default plugin settings
-  $.territoryPicker::defaults =
-      message: 'Hello world'  # option description
-
-  $.fn.territoryPicker = ( options ) ->
-    this.each ->
-      if $( this ).data( 'territoryPicker' ) is undefined
-        plugin = new $.territoryPicker( this, options )
-        $( this).data( 'territoryPicker', plugin )
 
