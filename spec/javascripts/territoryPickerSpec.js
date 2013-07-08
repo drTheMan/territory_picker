@@ -40,13 +40,19 @@
     });
     return describe('initialization', function() {
       return describe('worldwide option', function() {
-        it('should generate a \'worldwide?\' checkbox', function() {
-          new $.territoryPicker(this.$element);
-          return expect($('input.world[type="checkbox"]')).toExist();
+        beforeEach(function() {
+          return new $.territoryPicker(this.$element);
         });
-        return it('should check the worldwide option by default', function() {
-          new $.territoryPicker(this.$element);
-          return expect($('input.world')).toBeChecked();
+        it('should generate a \'worldwide?\' checkbox', function() {
+          expect($('input#territory_world')).toExist();
+          expect($('input#territory_world').prop('type')).toBe('checkbox');
+          expect($('input#territory_world').prop('name')).toBe('territories[world]');
+          return expect($('input#territory_world')).toBeChecked();
+        });
+        return it('should generate a \'worldwide\' label', function() {
+          expect($('label#territory_world')).toExist();
+          expect($('label#territory_world').prop('for')).toBe('territory_world');
+          return expect($('label#territory_world').html()).toBe('World');
         });
       });
     });

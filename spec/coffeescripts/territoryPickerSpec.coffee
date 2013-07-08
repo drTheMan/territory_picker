@@ -38,15 +38,19 @@ describe 'TerritoryPicker', ->
   describe 'initialization', ->
 
     describe 'worldwide option', ->
+      beforeEach ->
+        new $.territoryPicker( @$element )
+
       it 'should generate a \'worldwide?\' checkbox', ->
-        new $.territoryPicker( @$element )            
-
-        expect( $( 'input.world[type="checkbox"]' ) ).toExist()
-
-      it 'should check the worldwide option by default', ->
-        new $.territoryPicker( @$element )            
-
-        expect( $( 'input.world' ) ).toBeChecked()
+        expect( $( 'input#territory_world' ) ).toExist()
+        expect( $( 'input#territory_world' ).prop('type') ).toBe('checkbox')
+        expect( $( 'input#territory_world' ).prop('name') ).toBe('territories[world]')
+        expect( $( 'input#territory_world' ) ).toBeChecked()
+  
+      it 'should generate a \'worldwide\' label', ->
+        expect( $( 'label#territory_world' ) ).toExist()
+        expect( $( 'label#territory_world' ).prop('for') ).toBe('territory_world')
+        expect( $( 'label#territory_world' ).html() ).toBe('World')
         
 
         

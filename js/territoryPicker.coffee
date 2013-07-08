@@ -9,16 +9,23 @@
 class TerritoryPicker
   constructor: (@container, @options) ->
     @append_world_option()
-    @world_option().prop('checked', true)
+    @world_checkbox().prop('checked', true)
 
   append_world_option: ->
-    @container.append(@world_option())
+    @container.append(@world_checkbox())
+    @container.append(@world_label())
 
-  world_option: ->
+  world_checkbox: ->
     unless @$world_option
-      @$world_option = $('<input class="world" type="checkbox" />')
+      @$world_option = $('<input id="territory_world" type="checkbox" name="territories[world]" />')
 
     @$world_option
+
+  world_label: ->
+    unless @$world_label
+      @$world_label = $('<label id="territory_world" for="territory_world">World</label>')
+
+    @$world_label
 
 
 jQuery ->

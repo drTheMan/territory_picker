@@ -6,18 +6,26 @@
       this.container = container;
       this.options = options;
       this.append_world_option();
-      this.world_option().prop('checked', true);
+      this.world_checkbox().prop('checked', true);
     }
 
     TerritoryPicker.prototype.append_world_option = function() {
-      return this.container.append(this.world_option());
+      this.container.append(this.world_checkbox());
+      return this.container.append(this.world_label());
     };
 
-    TerritoryPicker.prototype.world_option = function() {
+    TerritoryPicker.prototype.world_checkbox = function() {
       if (!this.$world_option) {
-        this.$world_option = $('<input class="world" type="checkbox" />');
+        this.$world_option = $('<input id="territory_world" type="checkbox" name="territories[world]" />');
       }
       return this.$world_option;
+    };
+
+    TerritoryPicker.prototype.world_label = function() {
+      if (!this.$world_label) {
+        this.$world_label = $('<label id="territory_world" for="territory_world">World</label>');
+      }
+      return this.$world_label;
     };
 
     return TerritoryPicker;
