@@ -575,12 +575,23 @@ class TerritoryPicker
   _set_based_on_child_territories: (checkbox) ->
     checkbox.prop('checked', @_all_child_territories(checkbox).filter(':not(:checked)').length <= 0)
 
+  _checkbox_for_territory_code: (territory_code) ->
+    @element.find('input#territory_'+territory_code)
+
   all_checked_territory_codes: ->
     return @element.find('input:checked').map ->
       $(this).val()
 
   checked_territory_codes: ->
-    ['TODO']
+    result = []
+
+    # loop over all checked territory checkboxes
+    @element.find('input:checked').each (index, checkbox) =>
+      # only add to result array if there is not a (direct) parent that is checked as well
+      if !((parent = @_direct_parent_territory($(checkbox))).length > 0 && parent.is(':checked'))
+        result.push $(checkbox).val()
+
+    return result
 
 # register jquery widget
 $.widget 'fuga.territoryPicker', new TerritoryPicker

@@ -320,6 +320,9 @@ describe 'TerritoryPicker', ->
       # verify
       expect( @$element.territoryPicker('all_checked_territory_codes') ).toBe( ['be'] )
 
-    #it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
-    #  expect( @$element.data('territoryPicker').checked_territory_codes() ).toBe( ['world'] )
+    it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
+      result = @$element.territoryPicker('checked_territory_codes')
+      expect( result.length ).toBe 1
+      expect( result[0] ).toBe 'world'
+      
 

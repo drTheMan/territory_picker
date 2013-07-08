@@ -304,10 +304,16 @@
       });
     });
     return describe('data interface', function() {
-      return it('should have a all_checked_territory_codes function', function() {
+      it('should have a all_checked_territory_codes function', function() {
         this.$element.find('input[name="territories[world]"]').trigger('click');
         this.$element.find('input[name="territories[be]"]').trigger('click');
         return expect(this.$element.territoryPicker('all_checked_territory_codes')).toBe(['be']);
+      });
+      return it('should have a checked_territory_codes function that doesn\'t gives all checked child-territories', function() {
+        var result;
+        result = this.$element.territoryPicker('checked_territory_codes');
+        expect(result.length).toBe(1);
+        return expect(result[0]).toBe('world');
       });
     });
   });
