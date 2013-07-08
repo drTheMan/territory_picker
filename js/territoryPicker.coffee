@@ -521,12 +521,19 @@ class TerritoryPicker
                 label: "United Kingdom of Great Britain"
 
   constructor: (@container, @options) ->
+    # append default territory options
     @container.append @territory_options(@defaults.territories)
+
+    # attech change event listener to all territories
     @container.delegate 'input', 'change', (event) =>
+      # when a territory is changed, all child-territories change with it
       check = $(event.target).is(':checked')
       @all_child_territories( $(event.target) ).prop('checked', check)
-      @all_parent_territories( $(event.target) ).each (index, checkbox) =>
-        @set_based_on_child_territories( $(checkbox) )
+
+      # when a territory is changed, all parents should be updated (in order!)
+      current_checkbox = $(event.target)
+      while((current_checkbox = @direct_parent_territory(current_checkbox)).length > 0)
+        @set_based_on_child_territories( current_checkbox )
 
   territory_options: (territories_data) ->
     result = $('<ul class="territory_options"></ul>')
@@ -558,6 +565,9 @@ class TerritoryPicker
 
   all_parent_territories: (checkbox) ->
     checkbox.parents('ul.territory_options').siblings('input')
+
+  direct_parent_territory: (checkbox) ->
+    checkbox.parent().parent().siblings('input')
 
   set_based_on_child_territories: (checkbox) ->
     checkbox.prop('checked', @all_child_territories(checkbox).filter(':not(:checked)').length <= 0)

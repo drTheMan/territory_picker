@@ -781,12 +781,15 @@
       this.options = options;
       this.container.append(this.territory_options(this.defaults.territories));
       this.container.delegate('input', 'change', function(event) {
-        var check;
+        var check, current_checkbox, _results;
         check = $(event.target).is(':checked');
         _this.all_child_territories($(event.target)).prop('checked', check);
-        return _this.all_parent_territories($(event.target)).each(function(index, checkbox) {
-          return _this.set_based_on_child_territories($(checkbox));
-        });
+        current_checkbox = $(event.target);
+        _results = [];
+        while ((current_checkbox = _this.direct_parent_territory(current_checkbox)).length > 0) {
+          _results.push(_this.set_based_on_child_territories(current_checkbox));
+        }
+        return _results;
       });
     }
 
@@ -827,6 +830,10 @@
 
     TerritoryPicker.prototype.all_parent_territories = function(checkbox) {
       return checkbox.parents('ul.territory_options').siblings('input');
+    };
+
+    TerritoryPicker.prototype.direct_parent_territory = function(checkbox) {
+      return checkbox.parent().parent().siblings('input');
     };
 
     TerritoryPicker.prototype.set_based_on_child_territories = function(checkbox) {

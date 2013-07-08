@@ -36,7 +36,6 @@ describe 'TerritoryPicker', ->
       expect( @plugin.getState() ).toBe 'new state'
 
   describe 'initialization', ->
-
     describe 'worldwide option', ->
       beforeEach ->
         new $.territoryPicker( @$element )
@@ -313,3 +312,37 @@ describe 'TerritoryPicker', ->
         $.each territories, (code, label) =>
           expect( @$element.find('input[name="territories['+code+']"]') ).toBeChecked()
           expect( @$element.find('label[for="territory_'+code+'"]').html() ).toBe( label )
+
+  describe 'events', ->
+    beforeEach ->
+      new $.territoryPicker( @$element )
+
+    it 'should auto check/uncheck all child territories', ->
+      # verify number of input control in total
+      expect( @$element.find('input').length ).toBe(252)
+      # verify ALL inputs are cheked by default
+      expect( @$element.find('input:checked').length ).toBe(252)
+      # fake a click on the world territory
+      @$element.find('input[name="territories[world]"]').trigger('click')
+      # verify that ALL territories are unchecked
+      expect( @$element.find('input:checked').length ).toBe(0)
+      # fake another click on the world territory
+      @$element.find('input[name="territories[world]"]').trigger('click')
+      # verify that ALL territories are checked again
+      expect( @$element.find('input:checked').length ).toBe(252)
+
+    it 'should auto check/uncheck all parent territories', ->
+      # verify number of input control in total
+      expect( @$element.find('input').length ).toBe(252)
+      # verify ALL inputs are cheked by default
+      expect( @$element.find('input:checked').length ).toBe(252)
+      # fake a click on the netherlands territory
+      @$element.find('input[name="territories[nl]"]').trigger('click')
+      # verify that 3 territories are unchecked (nl, europe and world)
+      expect( @$element.find('input:checked').length ).toBe(249)
+      # fake another click on the world territory
+      @$element.find('input[name="territories[nl]"]').trigger('click')
+      # verify that ALL territories are checked again
+      expect( @$element.find('input:checked').length ).toBe(252)
+
+        

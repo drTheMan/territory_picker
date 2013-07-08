@@ -38,7 +38,7 @@
         return expect(this.plugin.getState()).toBe('new state');
       });
     });
-    return describe('initialization', function() {
+    describe('initialization', function() {
       describe('worldwide option', function() {
         beforeEach(function() {
           return new $.territoryPicker(this.$element);
@@ -320,6 +320,27 @@
             return expect(_this.$element.find('label[for="territory_' + code + '"]').html()).toBe(label);
           });
         });
+      });
+    });
+    return describe('events', function() {
+      beforeEach(function() {
+        return new $.territoryPicker(this.$element);
+      });
+      it('should auto check/uncheck all child territories', function() {
+        expect(this.$element.find('input').length).toBe(252);
+        expect(this.$element.find('input:checked').length).toBe(252);
+        this.$element.find('input[name="territories[world]"]').trigger('click');
+        expect(this.$element.find('input:checked').length).toBe(0);
+        this.$element.find('input[name="territories[world]"]').trigger('click');
+        return expect(this.$element.find('input:checked').length).toBe(252);
+      });
+      return it('should auto check/uncheck all parent territories', function() {
+        expect(this.$element.find('input').length).toBe(252);
+        expect(this.$element.find('input:checked').length).toBe(252);
+        this.$element.find('input[name="territories[nl]"]').trigger('click');
+        expect(this.$element.find('input:checked').length).toBe(249);
+        this.$element.find('input[name="territories[nl]"]').trigger('click');
+        return expect(this.$element.find('input:checked').length).toBe(252);
       });
     });
   });
