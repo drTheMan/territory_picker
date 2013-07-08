@@ -21,3 +21,7 @@ h1 strong {
   width: 980px;
   margin:  0 auto;
 }
+
+ul.territory_options{list-style: none; margin: 0; padding: 0; vertical-align: top;}
+ul.territory_options ul.territory_options{display: inline-block; width: 20%;}
+ul.territory_options ul.territory_options ul.territory_options{width: 100%;}
