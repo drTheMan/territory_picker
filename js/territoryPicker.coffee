@@ -558,35 +558,35 @@ class TerritoryPicker
     option
 
   _territory_checkbox: (territory_code, options) ->
-    $('<input id="territory_'+territory_code+'" value="'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
+    $('<input id="territory_'+territory_code+'" class="territory" value="'+territory_code+'" type="checkbox" name="territories['+territory_code+']" checked="checked" />')
 
   _territory_label: (territory_code, territory_label, options) ->
     $('<label id="territory_'+territory_code+'_name" for="territory_'+territory_code+'">'+territory_label+'</label>')
 
-  _all_child_territories: (checkbox) ->
-    checkbox.siblings('ul.territory_options').find('input').attr('checked', 'checked')
+  _all_child_territories: ($checkbox) ->
+    $checkbox.siblings('ul.territory_options').find('input.territory')
 
-  # _all_parent_territories: (checkbox) ->
-  #   checkbox.parents('ul.territory_options').siblings('input')
+  # _all_parent_territories: ($checkbox) ->
+  #   $checkbox.parents('ul.territory_options').siblings('input.territory')
 
-  _direct_parent_territory: (checkbox) ->
-    checkbox.parent().parent().siblings('input')
+  _direct_parent_territory: ($checkbox) ->
+    $checkbox.parent().parent().siblings('input.territory')
 
-  _set_based_on_child_territories: (checkbox) ->
-    checkbox.prop('checked', @_all_child_territories(checkbox).filter(':not(:checked)').length <= 0)
+  _set_based_on_child_territories: ($checkbox) ->
+    $checkbox.prop('checked', @_all_child_territories($checkbox).filter(':not(:checked)').length <= 0)
 
   _checkbox_for_territory_code: (territory_code) ->
-    @element.find('input#territory_'+territory_code)
+    @element.find('input.territory#territory_'+territory_code)
 
   all_checked_territory_codes: ->
-    return @element.find('input:checked').map ->
+    return @element.find('input.territory:checked').map ->
       $(this).val()
 
   checked_territory_codes: ->
     result = []
 
     # loop over all checked territory checkboxes
-    @element.find('input:checked').each (index, checkbox) =>
+    @element.find('input.territory:checked').each (index, checkbox) =>
       # only add to result array if there is not a (direct) parent that is checked as well
       if !((parent = @_direct_parent_territory($(checkbox))).length > 0 && parent.is(':checked'))
         result.push $(checkbox).val()

@@ -821,31 +821,31 @@
     };
 
     TerritoryPicker.prototype._territory_checkbox = function(territory_code, options) {
-      return $('<input id="territory_' + territory_code + '" value="' + territory_code + '" type="checkbox" name="territories[' + territory_code + ']" checked="checked" />');
+      return $('<input id="territory_' + territory_code + '" class="territory" value="' + territory_code + '" type="checkbox" name="territories[' + territory_code + ']" checked="checked" />');
     };
 
     TerritoryPicker.prototype._territory_label = function(territory_code, territory_label, options) {
       return $('<label id="territory_' + territory_code + '_name" for="territory_' + territory_code + '">' + territory_label + '</label>');
     };
 
-    TerritoryPicker.prototype._all_child_territories = function(checkbox) {
-      return checkbox.siblings('ul.territory_options').find('input').attr('checked', 'checked');
+    TerritoryPicker.prototype._all_child_territories = function($checkbox) {
+      return $checkbox.siblings('ul.territory_options').find('input.territory');
     };
 
-    TerritoryPicker.prototype._direct_parent_territory = function(checkbox) {
-      return checkbox.parent().parent().siblings('input');
+    TerritoryPicker.prototype._direct_parent_territory = function($checkbox) {
+      return $checkbox.parent().parent().siblings('input.territory');
     };
 
-    TerritoryPicker.prototype._set_based_on_child_territories = function(checkbox) {
-      return checkbox.prop('checked', this._all_child_territories(checkbox).filter(':not(:checked)').length <= 0);
+    TerritoryPicker.prototype._set_based_on_child_territories = function($checkbox) {
+      return $checkbox.prop('checked', this._all_child_territories($checkbox).filter(':not(:checked)').length <= 0);
     };
 
     TerritoryPicker.prototype._checkbox_for_territory_code = function(territory_code) {
-      return this.element.find('input#territory_' + territory_code);
+      return this.element.find('input.territory#territory_' + territory_code);
     };
 
     TerritoryPicker.prototype.all_checked_territory_codes = function() {
-      return this.element.find('input:checked').map(function() {
+      return this.element.find('input.territory:checked').map(function() {
         return $(this).val();
       });
     };
@@ -854,7 +854,7 @@
       var result,
         _this = this;
       result = [];
-      this.element.find('input:checked').each(function(index, checkbox) {
+      this.element.find('input.territory:checked').each(function(index, checkbox) {
         var parent;
         if (!((parent = _this._direct_parent_territory($(checkbox))).length > 0 && parent.is(':checked'))) {
           return result.push($(checkbox).val());
