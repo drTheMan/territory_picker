@@ -26,7 +26,7 @@
         return expect(plugin.settings.message).toBe(options.message);
       });
     });
-    return describe('plugin state', function() {
+    describe('plugin state', function() {
       beforeEach(function() {
         return this.plugin = new $.territoryPicker(this.$element);
       });
@@ -36,6 +36,18 @@
       return it('should be updatable', function() {
         this.plugin.setState('new state');
         return expect(this.plugin.getState()).toBe('new state');
+      });
+    });
+    return describe('initialization', function() {
+      return describe('worldwide option', function() {
+        it('should generate a \'worldwide?\' checkbox', function() {
+          new $.territoryPicker(this.$element);
+          return expect($('input.world[type="checkbox"]')).toExist();
+        });
+        return it('should check the worldwide option by default', function() {
+          new $.territoryPicker(this.$element);
+          return expect($('input.world')).toBeChecked();
+        });
       });
     });
   });

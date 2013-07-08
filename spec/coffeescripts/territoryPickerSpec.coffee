@@ -34,3 +34,19 @@ describe 'TerritoryPicker', ->
       @plugin.setState( 'new state' )
 
       expect( @plugin.getState() ).toBe 'new state'
+
+  describe 'initialization', ->
+
+    describe 'worldwide option', ->
+      it 'should generate a \'worldwide?\' checkbox', ->
+        new $.territoryPicker( @$element )            
+
+        expect( $( 'input.world[type="checkbox"]' ) ).toExist()
+
+      it 'should check the worldwide option by default', ->
+        new $.territoryPicker( @$element )            
+
+        expect( $( 'input.world' ) ).toBeChecked()
+        
+
+        

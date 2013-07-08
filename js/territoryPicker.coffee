@@ -6,6 +6,21 @@
 # Website : <website url>
 #
 
+class TerritoryPicker
+  constructor: (@container, @options) ->
+    @append_world_option()
+    @world_option().prop('checked', true)
+
+  append_world_option: ->
+    @container.append(@world_option())
+
+  world_option: ->
+    unless @$world_option
+      @$world_option = $('<input class="world" type="checkbox" />')
+
+    @$world_option
+
+
 jQuery ->
   $.territoryPicker = ( element, options ) ->
     # current state
@@ -31,10 +46,15 @@ jQuery ->
     @callSettingFunction = ( name, args = [] ) ->
       @settings[name].apply( this, args )
 
+    @$element = $ element
+
     @init = ->
       @settings = $.extend( {}, @defaults, options )
 
+      @territory_picker = new TerritoryPicker(@$element, @settings)
+
       @setState 'ready'
+
 
     # initialise the plugin
     @init()

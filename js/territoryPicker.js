@@ -1,4 +1,29 @@
 (function() {
+  var TerritoryPicker;
+
+  TerritoryPicker = (function() {
+    function TerritoryPicker(container, options) {
+      this.container = container;
+      this.options = options;
+      this.append_world_option();
+      this.world_option().prop('checked', true);
+    }
+
+    TerritoryPicker.prototype.append_world_option = function() {
+      return this.container.append(this.world_option());
+    };
+
+    TerritoryPicker.prototype.world_option = function() {
+      if (!this.$world_option) {
+        this.$world_option = $('<input class="world" type="checkbox" />');
+      }
+      return this.$world_option;
+    };
+
+    return TerritoryPicker;
+
+  })();
+
   jQuery(function() {
     $.territoryPicker = function(element, options) {
       var state;
@@ -20,8 +45,10 @@
         }
         return this.settings[name].apply(this, args);
       };
+      this.$element = $(element);
       this.init = function() {
         this.settings = $.extend({}, this.defaults, options);
+        this.territory_picker = new TerritoryPicker(this.$element, this.settings);
         return this.setState('ready');
       };
       this.init();
