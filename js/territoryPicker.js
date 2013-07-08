@@ -5,27 +5,35 @@
     function TerritoryPicker(container, options) {
       this.container = container;
       this.options = options;
-      this.append_world_option();
-      this.world_checkbox().prop('checked', true);
+      this.container.append(this.territory_option('world', 'World'));
+      this.container.append(this.territory_options());
     }
 
-    TerritoryPicker.prototype.append_world_option = function() {
-      this.container.append(this.world_checkbox());
-      return this.container.append(this.world_label());
+    TerritoryPicker.prototype.territory_options = function() {
+      var africa_group;
+      if (!this.$territory_options) {
+        this.$territory_options = $('<ul class="territory_groups"></ul>');
+        africa_group = $('<li id="territory_group_africa"></li>');
+        africa_group.append(this.territory_option('africa', 'Africa'));
+        this.$territory_options.append(africa_group);
+      }
+      return this.$territory_options;
     };
 
-    TerritoryPicker.prototype.world_checkbox = function() {
-      if (!this.$world_option) {
-        this.$world_option = $('<input id="territory_world" type="checkbox" name="territories[world]" />');
-      }
-      return this.$world_option;
+    TerritoryPicker.prototype.territory_checkbox = function(territory_code, options) {
+      return $('<input id="territory_' + territory_code + '" type="checkbox" name="territories[' + territory_code + ']" checked="checked" />');
     };
 
-    TerritoryPicker.prototype.world_label = function() {
-      if (!this.$world_label) {
-        this.$world_label = $('<label id="territory_world" for="territory_world">World</label>');
-      }
-      return this.$world_label;
+    TerritoryPicker.prototype.territory_label = function(territory_code, territory_label, options) {
+      return $('<label id="territory_' + territory_code + '_name" for="territory_' + territory_code + '">' + territory_label + '</label>');
+    };
+
+    TerritoryPicker.prototype.territory_option = function(territory_code, territory_label, options) {
+      var option;
+      option = $('<div class="territory_option"></div>');
+      option.append(this.territory_checkbox(territory_code, options));
+      option.append(this.territory_label(territory_code, territory_label, options));
+      return option;
     };
 
     return TerritoryPicker;

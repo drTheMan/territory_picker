@@ -48,9 +48,20 @@ describe 'TerritoryPicker', ->
         expect( $( 'input#territory_world' ) ).toBeChecked()
   
       it 'should generate a \'worldwide\' label', ->
-        expect( $( 'label#territory_world' ) ).toExist()
-        expect( $( 'label#territory_world' ).prop('for') ).toBe('territory_world')
-        expect( $( 'label#territory_world' ).html() ).toBe('World')
-        
+        expect( $( 'label#territory_world_name' ) ).toExist()
+        expect( $( 'label#territory_world_name' ).prop('for') ).toBe('territory_world')
+        expect( $( 'label#territory_world_name' ).html() ).toBe('World')
+
+    describe 'default territory options', ->
+      beforeEach ->
+        new $.territoryPicker( @$element )
+
+      it 'should generate the Africa territory group', ->
+        expect( africa_group = $('li#territory_group_africa') ).toExist()
+        expect( africa_group.find('input[name="territories[africa]"]') ).toBeChecked()
+        expect( africa_group.find('label[for="territory_africa"]').html() ).toBe('Africa')
+
+
+
 
         
