@@ -4,10 +4,12 @@
     options = {};
     beforeEach(function() {
       loadFixtures('fragment.html');
-      this.$element = $('#fixtures');
-      return this.$element.territoryPicker();
+      return this.$element = $('#fixtures');
     });
     describe('initialization', function() {
+      beforeEach(function() {
+        return this.$element.territoryPicker();
+      });
       describe('worldwide option', function() {
         it('should generate a \'worldwide?\' checkbox', function() {
           expect($('input#territory_world')).toExist();
@@ -286,6 +288,9 @@
       });
     });
     describe('events', function() {
+      beforeEach(function() {
+        return this.$element.territoryPicker();
+      });
       it('should auto check/uncheck all child territories', function() {
         expect(this.$element.find('input').length).toBe(252);
         expect(this.$element.find('input:checked').length).toBe(252);
@@ -303,17 +308,26 @@
         return expect(this.$element.find('input:checked').length).toBe(252);
       });
     });
-    return describe('data interface', function() {
+    describe('data interface', function() {
+      beforeEach(function() {
+        return this.$element.territoryPicker();
+      });
       it('should have a all_checked_territory_codes function', function() {
+        expect(this.$element.territoryPicker('all_checked_territory_codes').length).toEqual(252);
         this.$element.find('input[name="territories[world]"]').trigger('click');
         this.$element.find('input[name="territories[be]"]').trigger('click');
-        return expect(this.$element.territoryPicker('all_checked_territory_codes')).toBe(['be']);
+        return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['be']);
       });
       return it('should have a checked_territory_codes function that doesn\'t gives all checked child-territories', function() {
-        var result;
-        result = this.$element.territoryPicker('checked_territory_codes');
-        expect(result.length).toBe(1);
-        return expect(result[0]).toBe('world');
+        return expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['world']);
+      });
+    });
+    return describe('options', function() {
+      return it('should accept a `checked_territories` options which is not case-sensitive', function() {
+        this.$element.territoryPicker({
+          checked_territories: ['fr', 'NL']
+        });
+        return expect(this.$element.territoryPicker('all_checked_territory_codes').sort()).toEqual(['nl', 'fr'].sort());
       });
     });
   });

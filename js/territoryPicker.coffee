@@ -529,14 +529,30 @@ class TerritoryPicker
 
     # attech change event listener to all territories
     @element.delegate 'input', 'change', (event) =>
-      # when a territory is changed, all child-territories change with it
-      check = $(event.target).is(':checked')
-      @_all_child_territories( $(event.target) ).prop('checked', check)
+      @_territory_changed $(event.target).val()
 
-      # when a territory is changed, all parents should be updated (in order!)
-      current_checkbox = $(event.target)
-      while((current_checkbox = @_direct_parent_territory(current_checkbox)).length > 0)
-        @_set_based_on_child_territories( current_checkbox )
+    if @options.checked_territories
+      # uncheck all
+      @_checkbox_for_territory_code('world').prop('checked', false)
+      @_territory_changed 'world'
+      $.each @options.checked_territories, (index, territory_code) =>
+        @_checkbox_for_territory_code(territory_code).prop('checked', true)
+        @_territory_changed territory_code
+
+  _territory_changed: (territory_code) ->
+    $checkbox = @_checkbox_for_territory_code territory_code
+    return if $checkbox.length < 1
+
+    # when a territory is changed, all child-territories change with it
+    check = $checkbox.is(':checked')
+    @_all_child_territories( $checkbox ).prop('checked', check)
+
+    # when a territory is changed, all parents should be updated (in order!)
+    current_checkbox = $checkbox
+    while((current_checkbox = @_direct_parent_territory(current_checkbox)).length > 0)
+      @_set_based_on_child_territories( current_checkbox )
+
+
 
   _territory_options: (territories_data) ->
     result = $('<ul class="territory_options"></ul>')
@@ -576,11 +592,13 @@ class TerritoryPicker
     $checkbox.prop('checked', @_all_child_territories($checkbox).filter(':not(:checked)').length <= 0)
 
   _checkbox_for_territory_code: (territory_code) ->
-    @element.find('input.territory#territory_'+territory_code)
+    @element.find('input.territory#territory_'+territory_code.toLowerCase())
 
   all_checked_territory_codes: ->
-    return @element.find('input.territory:checked').map ->
-      $(this).val()
+    result = []
+    @element.find('input.territory:checked').each (index, checkbox) =>
+      result.push $(checkbox).val()
+    result
 
   checked_territory_codes: ->
     result = []

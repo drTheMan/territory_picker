@@ -4,9 +4,11 @@ describe 'TerritoryPicker', ->
   beforeEach ->
     loadFixtures 'fragment.html'
     @$element = $( '#fixtures' )
-    @$element.territoryPicker()
 
   describe 'initialization', ->
+    beforeEach ->
+      @$element.territoryPicker()
+
     describe 'worldwide option', ->
 
       it 'should generate a \'worldwide?\' checkbox', ->
@@ -281,6 +283,8 @@ describe 'TerritoryPicker', ->
           expect( @$element.find('label[for="territory_'+code+'"]').html() ).toBe( label )
 
   describe 'events', ->
+    beforeEach ->
+      @$element.territoryPicker()
 
     it 'should auto check/uncheck all child territories', ->
       # verify number of input control in total
@@ -311,18 +315,24 @@ describe 'TerritoryPicker', ->
       expect( @$element.find('input:checked').length ).toBe(252)
 
   describe 'data interface', ->
+    beforeEach ->
+      @$element.territoryPicker()
 
     it 'should have a all_checked_territory_codes function', ->
+      expect( @$element.territoryPicker('all_checked_territory_codes').length ).toEqual( 252 )
       # uncheck all
       @$element.find('input[name="territories[world]"]').trigger('click')
       # check belgium
       @$element.find('input[name="territories[be]"]').trigger('click')
       # verify
-      expect( @$element.territoryPicker('all_checked_territory_codes') ).toBe( ['be'] )
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual( ['be'] )
 
     it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
-      result = @$element.territoryPicker('checked_territory_codes')
-      expect( result.length ).toBe 1
-      expect( result[0] ).toBe 'world'
+      expect( @$element.territoryPicker('checked_territory_codes') ).toEqual ['world']
       
+
+  describe 'options', ->
+    it 'should accept a `checked_territories` options which is not case-sensitive', ->
+      @$element.territoryPicker({checked_territories: ['fr', 'NL']})
+      expect( @$element.territoryPicker('all_checked_territory_codes').sort() ).toEqual ['nl', 'fr'].sort()
 
