@@ -783,7 +783,7 @@
 
     TerritoryPicker.prototype._create = function() {
       var _this = this;
-      this.element.append(this._territory_options(this.defaults.territories));
+      this.element.append(this._territory_options(this.options.territories || this.defaults.territories));
       this.element.delegate('input', 'change', function(event) {
         return _this._territory_changed($(event.target).val());
       });
@@ -857,7 +857,7 @@
     };
 
     TerritoryPicker.prototype._checkbox_for_territory_code = function(territory_code) {
-      return this.element.find('input.territory#territory_' + territory_code.toLowerCase());
+      return this.element.find('input.territory#territory_' + territory_code);
     };
 
     TerritoryPicker.prototype.all_checked_territory_codes = function() {

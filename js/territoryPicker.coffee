@@ -525,7 +525,7 @@ class TerritoryPicker
 
   _create: ->
     # append default territory options
-    @element.append @_territory_options(@defaults.territories)
+    @element.append @_territory_options(@options.territories || @defaults.territories)
 
     # attech change event listener to all territories
     @element.delegate 'input', 'change', (event) =>
@@ -592,7 +592,7 @@ class TerritoryPicker
     $checkbox.prop('checked', @_all_child_territories($checkbox).filter(':not(:checked)').length <= 0)
 
   _checkbox_for_territory_code: (territory_code) ->
-    @element.find('input.territory#territory_'+territory_code.toLowerCase())
+    @element.find('input.territory#territory_'+territory_code)
 
   all_checked_territory_codes: ->
     result = []

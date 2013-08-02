@@ -332,7 +332,50 @@ describe 'TerritoryPicker', ->
       
 
   describe 'options', ->
-    it 'should accept a `checked_territories` options which is not case-sensitive', ->
+    it 'should accept a `checked_territories` options which IS case-sensitive', ->
       @$element.territoryPicker({checked_territories: ['fr', 'NL']})
-      expect( @$element.territoryPicker('all_checked_territory_codes').sort() ).toEqual ['nl', 'fr'].sort()
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual ['fr']
+
+    it 'should accept a `checked_territories` options which IS case-sensitive', ->
+      @$element.territoryPicker({checked_territories: ['fr', 'nl']})
+      expect( @$element.territoryPicker('all_checked_territory_codes').sort() ).toEqual ['fr', 'nl']
+
+    it 'should accept a territories options parameter', ->
+      @$element.territoryPicker({territories: {
+        world: {
+          label: "World",
+          territories: {
+            BI: {
+              label: 'BIG country',
+              territories: {
+                b1: {label: 'Big One'},
+                b2: {label: 'Big Two'},
+                b3: {label: 'Big Three'}
+              }
+            },
+
+            sm: {
+              label: 'small country',
+              territories: {
+                s1: {label: 'small one'}
+              }
+            }
+          }
+        }
+      }})
+
+      # verify that we have a custom set of territories
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1'])
+
+      # uncheck world
+      @$element.find('input[name="territories[world]"]').trigger('click')
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual([])
+
+      # check BIG Country
+      @$element.find('input[name="territories[BI]"]').trigger('click')
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['BI', 'b1', 'b2', 'b3'])
+
+      # check small country
+      @$element.find('input[name="territories[sm]"]').trigger('click')
+      expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1'])
 

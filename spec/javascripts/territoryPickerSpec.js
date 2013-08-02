@@ -323,11 +323,57 @@
       });
     });
     return describe('options', function() {
-      return it('should accept a `checked_territories` options which is not case-sensitive', function() {
+      it('should accept a `checked_territories` options which IS case-sensitive', function() {
         this.$element.territoryPicker({
           checked_territories: ['fr', 'NL']
         });
-        return expect(this.$element.territoryPicker('all_checked_territory_codes').sort()).toEqual(['nl', 'fr'].sort());
+        return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['fr']);
+      });
+      it('should accept a `checked_territories` options which IS case-sensitive', function() {
+        this.$element.territoryPicker({
+          checked_territories: ['fr', 'nl']
+        });
+        return expect(this.$element.territoryPicker('all_checked_territory_codes').sort()).toEqual(['fr', 'nl']);
+      });
+      return it('should accept a territories options parameter', function() {
+        this.$element.territoryPicker({
+          territories: {
+            world: {
+              label: "World",
+              territories: {
+                BI: {
+                  label: 'BIG country',
+                  territories: {
+                    b1: {
+                      label: 'Big One'
+                    },
+                    b2: {
+                      label: 'Big Two'
+                    },
+                    b3: {
+                      label: 'Big Three'
+                    }
+                  }
+                },
+                sm: {
+                  label: 'small country',
+                  territories: {
+                    s1: {
+                      label: 'small one'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        });
+        expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1']);
+        this.$element.find('input[name="territories[world]"]').trigger('click');
+        expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual([]);
+        this.$element.find('input[name="territories[BI]"]').trigger('click');
+        expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['BI', 'b1', 'b2', 'b3']);
+        this.$element.find('input[name="territories[sm]"]').trigger('click');
+        return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1']);
       });
     });
   });
