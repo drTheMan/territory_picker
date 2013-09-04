@@ -30,3 +30,7 @@ ul.territory_options ul.territory_options{display: block; width: 100%;}
 ul.territory_options ul.territory_options li{display: inline-block; width: 20%;}
 /* indivdual territories */
 ul.territory_options ul.territory_options li ul.territory_options li{display: block; width: 100%;}
+
+/* macro (check-all/-none) links */
+a.check_all{margin: 0 5px 0 10px;}
+a.check_all, a.check_none{font-size: 80%; color: #AAA; text-decoration: none;}

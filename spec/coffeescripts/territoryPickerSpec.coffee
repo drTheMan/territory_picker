@@ -388,4 +388,34 @@ describe 'TerritoryPicker', ->
       # verify only the WORLD input is unchecked
       expect( @$element.find('input:checked').length ).toBe(251)
 
+    it 'should add check all/none links when `independent_subterritories` is enabled', ->
+      @$element.territoryPicker({independent_subterritories: true})
+      expect( @$element.find('a#check_none_world').length ).toBe(1)
+      expect( @$element.find('a#check_all_world').length ).toBe(1)
+      expect( @$element.find('input:checked').length ).toBe(252)
+      # click check none link
+      @$element.find('a#check_none_world').trigger('click')
+      # only world territory still checked
+      expect( @$element.find('input:checked').length ).toBe(1)
+      # click check all link
+      @$element.find('a#check_all_world').trigger('click')
+      expect( @$element.find('input:checked').length ).toBe(252)
+
+      # click check none link
+      @$element.find('a#check_none_asia').trigger('click')
+      # only world territory still checked
+      expect( @$element.find('input:checked').length ).toBe(202)
+      # click check all link
+      @$element.find('a#check_all_asia').trigger('click')
+      expect( @$element.find('input:checked').length ).toBe(252)
+
+    it 'should NOT ad check all/none links when `independent_subterritories` is NOT enabled', ->
+      @$element.territoryPicker()
+      expect( @$element.find('a#check_none_world').length ).toBe(0)
+      expect( @$element.find('a#check_all_world').length ).toBe(0)
+      expect( @$element.find('a.check_none').length ).toBe(0)
+      expect( @$element.find('a.check_all').length ).toBe(0)
+
+
+
 

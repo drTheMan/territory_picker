@@ -375,13 +375,36 @@
         this.$element.find('input[name="territories[sm]"]').trigger('click');
         return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1']);
       });
-      return it('should accept an `independent_subterritories` options which, when enabled, DISABLES auto checking/unchecking', function() {
+      it('should accept an `independent_subterritories` options which, when enabled, DISABLES auto checking/unchecking', function() {
         this.$element.territoryPicker({
           independent_subterritories: true
         });
         expect(this.$element.find('input:checked').length).toBe(252);
         this.$element.find('input[name="territories[world]"]').trigger('click');
         return expect(this.$element.find('input:checked').length).toBe(251);
+      });
+      it('should add check all/none links when `independent_subterritories` is enabled', function() {
+        this.$element.territoryPicker({
+          independent_subterritories: true
+        });
+        expect(this.$element.find('a#check_none_world').length).toBe(1);
+        expect(this.$element.find('a#check_all_world').length).toBe(1);
+        expect(this.$element.find('input:checked').length).toBe(252);
+        this.$element.find('a#check_none_world').trigger('click');
+        expect(this.$element.find('input:checked').length).toBe(1);
+        this.$element.find('a#check_all_world').trigger('click');
+        expect(this.$element.find('input:checked').length).toBe(252);
+        this.$element.find('a#check_none_asia').trigger('click');
+        expect(this.$element.find('input:checked').length).toBe(202);
+        this.$element.find('a#check_all_asia').trigger('click');
+        return expect(this.$element.find('input:checked').length).toBe(252);
+      });
+      return it('should NOT ad check all/none links when `independent_subterritories` is NOT enabled', function() {
+        this.$element.territoryPicker();
+        expect(this.$element.find('a#check_none_world').length).toBe(0);
+        expect(this.$element.find('a#check_all_world').length).toBe(0);
+        expect(this.$element.find('a.check_none').length).toBe(0);
+        return expect(this.$element.find('a.check_all').length).toBe(0);
       });
     });
   });

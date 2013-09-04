@@ -787,6 +787,16 @@
       this.element.delegate('input', 'change', function(event) {
         return _this._territory_changed($(event.target).val());
       });
+      this.element.delegate('a.check_all', 'click', function(event) {
+        var territory_code;
+        territory_code = $(event.target).prop('id').replace('check_all_', '');
+        return _this._all_child_territories(territory_code).prop('checked', true);
+      });
+      this.element.delegate('a.check_none', 'click', function(event) {
+        var territory_code;
+        territory_code = $(event.target).prop('id').replace('check_none_', '');
+        return _this._all_child_territories(territory_code).prop('checked', false);
+      });
       if (this.options.checked_territories) {
         this._checkbox_for_territory_code('world').prop('checked', false);
         this._territory_changed('world');
@@ -820,6 +830,9 @@
       $.each(territories_data, function(territory_code, territory_data) {
         var option;
         option = _this._territory_option(territory_code, territory_data.label);
+        if (territory_data.territories && _this.options.independent_subterritories === true) {
+          option.append(_this._territory_macro_links(territory_code));
+        }
         if (territory_data.territories) {
           option.append(_this._territory_options(territory_data.territories));
         }
@@ -844,7 +857,17 @@
       return $('<label id="territory_' + territory_code + '_name" for="territory_' + territory_code + '">' + territory_label + '</label>');
     };
 
+    TerritoryPicker.prototype._territory_macro_links = function(territory_code) {
+      var all, none;
+      all = '<a href="#" id="check_all_' + territory_code + '" class="check_all">All</a>';
+      none = '<a href="#" id="check_none_' + territory_code + '" class="check_none">None</a>';
+      return $(all + none);
+    };
+
     TerritoryPicker.prototype._all_child_territories = function($checkbox) {
+      if (!$checkbox.siblings) {
+        $checkbox = this.element.find('input.territory#territory_' + $checkbox);
+      }
       return $checkbox.siblings('ul.territory_options').find('input.territory');
     };
 

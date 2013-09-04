@@ -531,6 +531,14 @@ class TerritoryPicker
     @element.delegate 'input', 'change', (event) =>
       @_territory_changed $(event.target).val()
 
+    @element.delegate 'a.check_all', 'click', (event) =>
+      territory_code = $(event.target).prop('id').replace('check_all_', '')
+      @_all_child_territories(territory_code).prop('checked', true)
+
+    @element.delegate 'a.check_none', 'click', (event) =>
+      territory_code = $(event.target).prop('id').replace('check_none_', '')
+      @_all_child_territories(territory_code).prop('checked', false)
+
     if @options.checked_territories
       # uncheck all
       @_checkbox_for_territory_code('world').prop('checked', false)
@@ -553,15 +561,15 @@ class TerritoryPicker
       @_set_based_on_child_territories( current_checkbox )
 
 
-
   _territory_options: (territories_data) ->
     result = $('<ul class="territory_options"></ul>')
 
     $.each territories_data, (territory_code, territory_data) =>
       option = @_territory_option(territory_code, territory_data.label)
-
-      if territory_data.territories
-        option.append @_territory_options(territory_data.territories)
+      # add check all/none macro links IF this territory has sub-territories
+      option.append( @_territory_macro_links(territory_code) ) if territory_data.territories && @options.independent_subterritories == true
+      # add sub territories
+      option.append @_territory_options(territory_data.territories) if territory_data.territories
 
       result.append option
    
@@ -579,7 +587,14 @@ class TerritoryPicker
   _territory_label: (territory_code, territory_label, options) ->
     $('<label id="territory_'+territory_code+'_name" for="territory_'+territory_code+'">'+territory_label+'</label>')
 
+  _territory_macro_links: (territory_code) ->
+    all = '<a href="#" id="check_all_'+territory_code+'" class="check_all">All</a>'
+    none = '<a href="#" id="check_none_'+territory_code+'" class="check_none">None</a>'
+    $(all + none)
+
   _all_child_territories: ($checkbox) ->
+    # first make sure that we have a jQuery object, if not, expect it to be a territory code
+    $checkbox = @element.find('input.territory#territory_'+$checkbox) if !$checkbox.siblings
     $checkbox.siblings('ul.territory_options').find('input.territory')
 
   # _all_parent_territories: ($checkbox) ->
