@@ -335,7 +335,7 @@
         });
         return expect(this.$element.territoryPicker('all_checked_territory_codes').sort()).toEqual(['fr', 'nl']);
       });
-      return it('should accept a territories options parameter', function() {
+      it('should accept a territories options parameter', function() {
         this.$element.territoryPicker({
           territories: {
             world: {
@@ -374,6 +374,14 @@
         expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['BI', 'b1', 'b2', 'b3']);
         this.$element.find('input[name="territories[sm]"]').trigger('click');
         return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1']);
+      });
+      return it('should accept an `independent_subterritories` options which, when enabled, DISABLES auto checking/unchecking', function() {
+        this.$element.territoryPicker({
+          independent_subterritories: true
+        });
+        expect(this.$element.find('input:checked').length).toBe(252);
+        this.$element.find('input[name="territories[world]"]').trigger('click');
+        return expect(this.$element.find('input:checked').length).toBe(251);
       });
     });
   });

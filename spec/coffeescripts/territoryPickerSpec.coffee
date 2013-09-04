@@ -379,3 +379,13 @@ describe 'TerritoryPicker', ->
       @$element.find('input[name="territories[sm]"]').trigger('click')
       expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1'])
 
+    it 'should accept an `independent_subterritories` options which, when enabled, DISABLES auto checking/unchecking', ->
+      @$element.territoryPicker({independent_subterritories: true})
+      # verify ALL inputs are cheked by default
+      expect( @$element.find('input:checked').length ).toBe(252)
+      # fake a click on the world territory
+      @$element.find('input[name="territories[world]"]').trigger('click')
+      # verify only the WORLD input is unchecked
+      expect( @$element.find('input:checked').length ).toBe(251)
+
+

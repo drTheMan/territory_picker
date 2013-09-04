@@ -541,7 +541,7 @@ class TerritoryPicker
 
   _territory_changed: (territory_code) ->
     $checkbox = @_checkbox_for_territory_code territory_code
-    return if $checkbox.length < 1
+    return if $checkbox.length < 1 || @options.independent_subterritories == true
 
     # when a territory is changed, all child-territories change with it
     check = $checkbox.is(':checked')

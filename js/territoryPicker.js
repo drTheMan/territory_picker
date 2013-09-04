@@ -800,7 +800,7 @@
     TerritoryPicker.prototype._territory_changed = function(territory_code) {
       var $checkbox, check, current_checkbox, _results;
       $checkbox = this._checkbox_for_territory_code(territory_code);
-      if ($checkbox.length < 1) {
+      if ($checkbox.length < 1 || this.options.independent_subterritories === true) {
         return;
       }
       check = $checkbox.is(':checked');
