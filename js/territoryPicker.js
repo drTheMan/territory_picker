@@ -783,7 +783,11 @@
 
     TerritoryPicker.prototype._create = function() {
       var _this = this;
-      this.element.append(this._territory_options(this.options.territories || this.defaults.territories));
+      if (this.options.sort_territories === true) {
+        this.element.append(this._territory_options(this._sorted_territory_data()));
+      } else {
+        this.element.append(this._territory_options(this.options.territories || this.defaults.territories));
+      }
       this.element.delegate('input', 'change', function(event) {
         return _this._territory_changed($(event.target).val());
       });
@@ -821,6 +825,35 @@
         _results.push(this._set_based_on_child_territories(current_checkbox));
       }
       return _results;
+    };
+
+    TerritoryPicker.prototype._sorted_territory_data = function() {
+      return this._sort_territory_data_recursive(this.options.territories || this.defaults.territories);
+    };
+
+    TerritoryPicker.prototype._sort_territory_data_recursive = function(territories_data) {
+      var sorted_data,
+        _this = this;
+      sorted_data = this._sort_territory_data(territories_data);
+      $.each(territories_data, function(territory_code, territory_data) {
+        if (territory_data.territories) {
+          return sorted_data[territory_code].territories = _this._sort_territory_data_recursive(territory_data.territories);
+        }
+      });
+      return sorted_data;
+    };
+
+    TerritoryPicker.prototype._sort_territory_data = function(territory_data) {
+      var keys, sorted,
+        _this = this;
+      sorted = {};
+      keys = Object.keys(territory_data).sort(function(a, b) {
+        return territory_data[a].label.toLowerCase().localeCompare(territory_data[b].label.toLowerCase());
+      });
+      $.each(keys, function(index, key) {
+        return sorted[key] = territory_data[key];
+      });
+      return sorted;
     };
 
     TerritoryPicker.prototype._territory_options = function(territories_data) {

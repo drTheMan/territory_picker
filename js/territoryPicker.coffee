@@ -524,8 +524,11 @@ class TerritoryPicker
                 label: "United Kingdom of Great Britain"
 
   _create: ->
-    # append default territory options
-    @element.append @_territory_options(@options.territories || @defaults.territories)
+    # append territory options
+    if @options.sort_territories == true
+      @element.append @_territory_options(@_sorted_territory_data())
+    else
+      @element.append @_territory_options(@options.territories || @defaults.territories)
 
     # attech change event listener to all territories
     @element.delegate 'input', 'change', (event) =>
@@ -560,6 +563,23 @@ class TerritoryPicker
     while((current_checkbox = @_direct_parent_territory(current_checkbox)).length > 0)
       @_set_based_on_child_territories( current_checkbox )
 
+
+  _sorted_territory_data: ->
+    @_sort_territory_data_recursive(@options.territories || @defaults.territories)
+
+  _sort_territory_data_recursive: (territories_data) ->
+    sorted_data = @_sort_territory_data(territories_data)
+
+    $.each territories_data, (territory_code, territory_data) =>
+      sorted_data[territory_code].territories = @_sort_territory_data_recursive(territory_data.territories) if territory_data.territories
+
+    return sorted_data
+
+  _sort_territory_data: (territory_data) ->
+    sorted = {}
+    keys = Object.keys(territory_data).sort((a,b) -> territory_data[a].label.toLowerCase().localeCompare(territory_data[b].label.toLowerCase()))
+    $.each keys, (index, key) => sorted[key] = territory_data[key]
+    return sorted
 
   _territory_options: (territories_data) ->
     result = $('<ul class="territory_options"></ul>')

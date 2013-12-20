@@ -379,6 +379,63 @@ describe 'TerritoryPicker', ->
       @$element.find('input[name="territories[sm]"]').trigger('click')
       expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['world', 'BI', 'b1', 'b2', 'b3', 'sm', 's1'])
 
+    describe 'sort_territories option', ->
+
+      it 'should not sort by default', ->
+        @$element.territoryPicker({territories: {
+          world: {
+            label: "World",
+            territories: {
+              b: {
+                label: 'Second',
+                territories: {
+                  b1: {label: 'Second B'},
+                  b2: {label: 'Second A'},
+                  b3: {label: 'Second C'}
+                }
+              },
+
+              a: {
+                label: 'First',
+                territories: {
+                  a2: {label: 'First Second'}
+                  a1: {label: 'First first'}
+                }
+              }
+            }
+          }
+        }})
+        expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['world', 'b', 'b1', 'b2', 'b3', 'a', 'a2', 'a1'])
+        expect( @$element.find('label').text() ).toEqual('WorldSecondSecond BSecond ASecond CFirstFirst SecondFirst first')
+
+      it 'should sort with sort_territories set to true', ->
+        @$element.territoryPicker({sort_territories: true, territories: {
+          world: {
+            label: "World",
+            territories: {
+              b: {
+                label: 'Second',
+                territories: {
+                  b1: {label: 'Second B'},
+                  b2: {label: 'Second A'},
+                  b3: {label: 'Second C'}
+                }
+              },
+
+              a: {
+                label: 'First',
+                territories: {
+                  a2: {label: 'First B'}
+                  a1: {label: 'First A'}
+                }
+              }
+            }
+          }
+        }})
+        expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual(['world', 'a', 'a1', 'a2', 'b', 'b2', 'b1', 'b3', ])
+        expect( @$element.find('label').text() ).toEqual('WorldFirstFirst AFirst BSecondSecond ASecond BSecond C')
+
+  describe '`independent_subterritories` option', ->
     it 'should accept an `independent_subterritories` options which, when enabled, DISABLES auto checking/unchecking', ->
       @$element.territoryPicker({independent_subterritories: true})
       # verify ALL inputs are cheked by default
