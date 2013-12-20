@@ -782,7 +782,8 @@
     };
 
     TerritoryPicker.prototype._create = function() {
-      var _this = this;
+      var world_box,
+        _this = this;
       if (this.options.sort_territories === true) {
         this.element.append(this._territory_options(this._sorted_territory_data()));
       } else {
@@ -802,11 +803,11 @@
         return _this._all_child_territories(territory_code).prop('checked', false);
       });
       if (this.options.checked_territories) {
-        this._checkbox_for_territory_code('world').prop('checked', false);
-        this._territory_changed('world');
+        world_box = this._checkbox_for_territory_code('world');
+        world_box.prop('checked', false);
+        this._all_child_territories(world_box).prop('checked', false);
         return $.each(this.options.checked_territories, function(index, territory_code) {
-          _this._checkbox_for_territory_code(territory_code).prop('checked', true);
-          return _this._territory_changed(territory_code);
+          return _this._checkbox_for_territory_code(territory_code).prop('checked', true);
         });
       }
     };

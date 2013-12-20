@@ -340,6 +340,10 @@ describe 'TerritoryPicker', ->
       @$element.territoryPicker({checked_territories: ['fr', 'nl']})
       expect( @$element.territoryPicker('all_checked_territory_codes').sort() ).toEqual ['fr', 'nl']
 
+    it 'should accept the `checked territories` option together with the `independent_subterritories` option', ->
+      @$element.territoryPicker({independent_subterritories: true, checked_territories: ['fr', 'americas', 'nl']})
+      expect( @$element.territoryPicker('all_checked_territory_codes').sort() ).toEqual ['americas', 'fr', 'nl']
+
     it 'should accept a territories options parameter', ->
       @$element.territoryPicker({territories: {
         world: {

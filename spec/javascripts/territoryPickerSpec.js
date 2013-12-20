@@ -335,6 +335,13 @@
         });
         return expect(this.$element.territoryPicker('all_checked_territory_codes').sort()).toEqual(['fr', 'nl']);
       });
+      it('should accept the `checked territories` option together with the `independent_subterritories` option', function() {
+        this.$element.territoryPicker({
+          independent_subterritories: true,
+          checked_territories: ['fr', 'americas', 'nl']
+        });
+        return expect(this.$element.territoryPicker('all_checked_territory_codes').sort()).toEqual(['americas', 'fr', 'nl']);
+      });
       it('should accept a territories options parameter', function() {
         this.$element.territoryPicker({
           territories: {
