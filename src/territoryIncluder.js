@@ -26,7 +26,11 @@
         event.preventDefault();
         event.stopPropagation();
         territory_code = $(event.target).parent().prop('id').replace('territory_', '');
-        _this._include_territory_recursive(territory_code);
+        if (_this._territory_inclusion_state(territory_code) === 'included') {
+          _this._uninclude_territory_recursive(territory_code);
+        } else {
+          _this._include_territory_recursive(territory_code);
+        }
         if (parent_code = _this._parent_code(territory_code)) {
           return _this._update_inclusion_territory(parent_code);
         }
@@ -35,7 +39,11 @@
         var parent_code, territory_code;
         event.preventDefault();
         territory_code = $(event.target).parent().prop('id').replace('territory_', '');
-        _this._exclude_territory_recursive(territory_code);
+        if (_this._territory_inclusion_state(territory_code) === 'excluded') {
+          _this._unexclude_territory_recursive(territory_code);
+        } else {
+          _this._exclude_territory_recursive(territory_code);
+        }
         if (parent_code = _this._parent_code(territory_code)) {
           return _this._update_inclusion_territory(parent_code);
         }
@@ -66,8 +74,6 @@
       all = this._all_child_territory_containers(code);
       included = this._all_child_territory_containers(code, '.included');
       excluded = this._all_child_territory_containers(code, '.excluded');
-      console.log(code);
-      console.log([all.length, included.length, excluded.length]);
       if (all.length === included.length) {
         this._include_territory(code);
         return;
@@ -80,12 +86,20 @@
       return this._unexclude_territory(code);
     };
 
-    TerritoryIncluder.prototype._include_territory = function(code) {
-      return this.element.find('li#territory_' + code).addClass('included').removeClass('excluded');
+    TerritoryIncluder.prototype._territory_inclusion_state = function(code) {
+      var el;
+      el = this.element.find('li#territory_' + code);
+      if (el.hasClass('included')) {
+        return 'included';
+      }
+      if (el.hasClass('excluded')) {
+        return 'excluded';
+      }
+      return null;
     };
 
-    TerritoryIncluder.prototype._uninclude_territory = function(code) {
-      return this.element.find('li#territory_' + code).removeClass('included');
+    TerritoryIncluder.prototype._include_territory = function(code) {
+      return this.element.find('li#territory_' + code).addClass('included').removeClass('excluded');
     };
 
     TerritoryIncluder.prototype._include_territory_recursive = function(code) {
@@ -96,12 +110,20 @@
       });
     };
 
-    TerritoryIncluder.prototype._exclude_territory = function(code) {
-      return this.element.find('li#territory_' + code).addClass('excluded').removeClass('included');
+    TerritoryIncluder.prototype._uninclude_territory = function(code) {
+      return this.element.find('li#territory_' + code).removeClass('included');
     };
 
-    TerritoryIncluder.prototype._unexclude_territory = function(code) {
-      return this.element.find('li#territory_' + code).removeClass('excluded');
+    TerritoryIncluder.prototype._uninclude_territory_recursive = function(code) {
+      var _this = this;
+      this._uninclude_territory(code);
+      return this._all_child_territory_containers(code).each(function(idx, containerEl) {
+        return _this._uninclude_territory_recursive($(containerEl).prop('id').replace('territory_', ''));
+      });
+    };
+
+    TerritoryIncluder.prototype._exclude_territory = function(code) {
+      return this.element.find('li#territory_' + code).addClass('excluded').removeClass('included');
     };
 
     TerritoryIncluder.prototype._exclude_territory_recursive = function(code) {
@@ -109,6 +131,18 @@
       this._exclude_territory(code);
       return this._all_child_territory_containers(code).each(function(idx, containerEl) {
         return _this._exclude_territory_recursive($(containerEl).prop('id').replace('territory_', ''));
+      });
+    };
+
+    TerritoryIncluder.prototype._unexclude_territory = function(code) {
+      return this.element.find('li#territory_' + code).removeClass('excluded');
+    };
+
+    TerritoryIncluder.prototype._unexclude_territory_recursive = function(code) {
+      var _this = this;
+      this._unexclude_territory(code);
+      return this._all_child_territory_containers(code).each(function(idx, containerEl) {
+        return _this._unexclude_territory_recursive($(containerEl).prop('id').replace('territory_', ''));
       });
     };
 

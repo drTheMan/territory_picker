@@ -37,3 +37,6 @@ a.check_all, a.check_none{font-size: 80%; color: #AAA; text-decoration: none;}
 
 li.included{background-color: green;}
 li.excluded{background-color: red;}
+
+a.include{background-color: green; border: 1px solid black; border-radius: 10px;}
+a.exclude{background-color: red; border: 1px solid black; border-radius: 10px;}
