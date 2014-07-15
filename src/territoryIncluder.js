@@ -16,6 +16,66 @@
       return _ref;
     }
 
+    TerritoryIncluder.prototype._create = function() {
+      var _this = this;
+      TerritoryIncluder.__super__._create.call(this);
+      this._add_territory_id_to_containers();
+      this._turn_into_include_options();
+      this.element.delegate('a.include', 'click', function(event) {
+        var territory_code;
+        event.preventDefault();
+        event.stopPropagation();
+        territory_code = $(event.target).parent().prop('id').replace('territory_', '');
+        return _this._include_territory_recursive(territory_code);
+      });
+      return this.element.delegate('a.exclude', 'click', function(event) {
+        var territory_code;
+        event.preventDefault();
+        territory_code = $(event.target).parent().prop('id').replace('territory_', '');
+        return _this._exclude_territory_recursive(territory_code);
+      });
+    };
+
+    TerritoryIncluder.prototype._add_territory_id_to_containers = function() {
+      return this.element.find('input').each(function(idx, inputEl) {
+        var el;
+        el = $(inputEl);
+        return el.parent().prop('id', el.prop('id'));
+      });
+    };
+
+    TerritoryIncluder.prototype._turn_into_include_options = function() {
+      return this.element.find('input').each(function(idx, inputEl) {
+        var el, excludeEl, includeEl;
+        el = $(inputEl);
+        includeEl = $('<a href="#" class="include">+</a>');
+        excludeEl = $('<a href="#" class="exclude">-</a>');
+        el.after(includeEl);
+        return el.after(excludeEl);
+      });
+    };
+
+    TerritoryIncluder.prototype._include_territory_recursive = function(code) {
+      var _this = this;
+      this.element.find('li#territory_' + code).addClass('included');
+      this.element.find('li#territory_' + code).removeClass('excluded');
+      return this._all_child_territory_containers(code).each(function(idx, containerEl) {
+        return _this._include_territory_recursive($(containerEl).prop('id').replace('territory_', ''));
+      });
+    };
+
+    TerritoryIncluder.prototype._exclude_territory_recursive = function(code) {
+      var _this = this;
+      this.element.find('li#territory_' + code).addClass('excluded').removeClass('included');
+      return this._all_child_territory_containers(code).each(function(idx, containerEl) {
+        return _this._exclude_territory_recursive($(containerEl).prop('id').replace('territory_', ''));
+      });
+    };
+
+    TerritoryIncluder.prototype._all_child_territory_containers = function(code) {
+      return this.element.find('li#territory_' + code + ' > ul.territory_options > li');
+    };
+
     return TerritoryIncluder;
 
   })(TerritoryPicker);

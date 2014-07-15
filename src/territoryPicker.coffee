@@ -536,17 +536,17 @@ class @TerritoryPicker
 
     @element.delegate 'a.check_all', 'click', (event) =>
       territory_code = $(event.target).prop('id').replace('check_all_', '')
-      @_all_child_territories(territory_code).prop('checked', true)
+      @_all_child_territory_checkboxes(territory_code).prop('checked', true)
 
     @element.delegate 'a.check_none', 'click', (event) =>
       territory_code = $(event.target).prop('id').replace('check_none_', '')
-      @_all_child_territories(territory_code).prop('checked', false)
+      @_all_child_territory_checkboxes(territory_code).prop('checked', false)
 
     if @options.checked_territories
       # uncheck all
       world_box = @_checkbox_for_territory_code('world')
       world_box.prop('checked', false)
-      @_all_child_territories( world_box ).prop('checked', false)
+      @_all_child_territory_checkboxes( world_box ).prop('checked', false)
       $.each @options.checked_territories, (index, territory_code) =>
         @_checkbox_for_territory_code(territory_code).prop('checked', true)
 
@@ -556,7 +556,7 @@ class @TerritoryPicker
 
     # when a territory is changed, all child-territories change with it
     check = $checkbox.is(':checked')
-    @_all_child_territories( $checkbox ).prop('checked', check)
+    @_all_child_territory_checkboxes( $checkbox ).prop('checked', check)
 
     # when a territory is changed, all parents should be updated (in order!)
     current_checkbox = $checkbox
@@ -612,7 +612,7 @@ class @TerritoryPicker
     none = '<a href="#" id="check_none_'+territory_code+'" class="check_none">None</a>'
     $(all + none)
 
-  _all_child_territories: ($checkbox) ->
+  _all_child_territory_checkboxes: ($checkbox) ->
     # first make sure that we have a jQuery object, if not, expect it to be a territory code
     $checkbox = @element.find('input.territory#territory_'+$checkbox) if !$checkbox.siblings
     $checkbox.siblings('ul.territory_options').find('input.territory')
@@ -624,7 +624,7 @@ class @TerritoryPicker
     $checkbox.parent().parent().siblings('input.territory')
 
   _set_based_on_child_territories: ($checkbox) ->
-    $checkbox.prop('checked', @_all_child_territories($checkbox).filter(':not(:checked)').length <= 0)
+    $checkbox.prop('checked', @_all_child_territory_checkboxes($checkbox).filter(':not(:checked)').length <= 0)
 
   _checkbox_for_territory_code: (territory_code) ->
     @element.find('input.territory#territory_'+territory_code)

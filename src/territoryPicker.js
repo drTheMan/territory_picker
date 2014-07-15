@@ -796,17 +796,17 @@
       this.element.delegate('a.check_all', 'click', function(event) {
         var territory_code;
         territory_code = $(event.target).prop('id').replace('check_all_', '');
-        return _this._all_child_territories(territory_code).prop('checked', true);
+        return _this._all_child_territory_checkboxes(territory_code).prop('checked', true);
       });
       this.element.delegate('a.check_none', 'click', function(event) {
         var territory_code;
         territory_code = $(event.target).prop('id').replace('check_none_', '');
-        return _this._all_child_territories(territory_code).prop('checked', false);
+        return _this._all_child_territory_checkboxes(territory_code).prop('checked', false);
       });
       if (this.options.checked_territories) {
         world_box = this._checkbox_for_territory_code('world');
         world_box.prop('checked', false);
-        this._all_child_territories(world_box).prop('checked', false);
+        this._all_child_territory_checkboxes(world_box).prop('checked', false);
         return $.each(this.options.checked_territories, function(index, territory_code) {
           return _this._checkbox_for_territory_code(territory_code).prop('checked', true);
         });
@@ -820,7 +820,7 @@
         return;
       }
       check = $checkbox.is(':checked');
-      this._all_child_territories($checkbox).prop('checked', check);
+      this._all_child_territory_checkboxes($checkbox).prop('checked', check);
       current_checkbox = $checkbox;
       _results = [];
       while ((current_checkbox = this._direct_parent_territory(current_checkbox)).length > 0) {
@@ -899,7 +899,7 @@
       return $(all + none);
     };
 
-    TerritoryPicker.prototype._all_child_territories = function($checkbox) {
+    TerritoryPicker.prototype._all_child_territory_checkboxes = function($checkbox) {
       if (!$checkbox.siblings) {
         $checkbox = this.element.find('input.territory#territory_' + $checkbox);
       }
@@ -911,7 +911,7 @@
     };
 
     TerritoryPicker.prototype._set_based_on_child_territories = function($checkbox) {
-      return $checkbox.prop('checked', this._all_child_territories($checkbox).filter(':not(:checked)').length <= 0);
+      return $checkbox.prop('checked', this._all_child_territory_checkboxes($checkbox).filter(':not(:checked)').length <= 0);
     };
 
     TerritoryPicker.prototype._checkbox_for_territory_code = function(territory_code) {
