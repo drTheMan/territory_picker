@@ -320,6 +320,8 @@
         return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['be']);
       });
       return it('should have a checked_territory_codes function that doesn\'t gives all checked child-territories', function() {
+        expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['be']);
+        this.$element.find('input#territory_world').trigger('click');
         return expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['world']);
       });
     });

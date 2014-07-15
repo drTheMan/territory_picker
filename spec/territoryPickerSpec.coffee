@@ -328,8 +328,10 @@ describe 'TerritoryPicker', ->
       expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual( ['be'] )
 
     it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
+      expect( @$element.territoryPicker('checked_territory_codes') ).toEqual ['be']
+      # check all again
+      @$element.find('input#territory_world').trigger('click')
       expect( @$element.territoryPicker('checked_territory_codes') ).toEqual ['world']
-      
 
   describe 'options', ->
     it 'should accept a `checked_territories` options which IS case-sensitive', ->

@@ -638,7 +638,6 @@ class @TerritoryPicker
 
   checked_territory_codes: ->
     result = []
-
     # loop over all checked territory checkboxes
     @element.find('input.territory:checked').each (index, checkbox) =>
       # only add to result array if there is not a (direct) parent that is checked as well

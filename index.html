@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Jasmine Spec Runner v2.0.0</title>
+
+  <link rel="stylesheet" href="css/site.css">
+
+  <script type="text/javascript" src="lib/jquery.js"></script>
+  <script type="text/javascript" src="lib/jqueryui.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="src/territoryPicker.js"></script>
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>Territory Picker</h1>
+    </header>
+
+    <div id="main">
+    </div>
+
+    <footer>
+    </footer>
+  </div>
+
+  <script>
+    $( function() {
+      // $( '#main' ).territoryPicker({checked_territories: ['AFRICA', 'NL']});
+      $( '#main' ).territoryPicker();
+      // $( '#main' ).territoryIncluder({independent_subterritories: true, checked_territories: ['AFRICA', 'NL']});
+    } );
+  </script>
+
+</body>
+</html>
