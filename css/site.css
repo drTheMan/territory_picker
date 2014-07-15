@@ -34,3 +34,6 @@ ul.territory_options ul.territory_options li ul.territory_options li{display: bl
 /* macro (check-all/-none) links */
 a.check_all{margin: 0 5px 0 10px;}
 a.check_all, a.check_none{font-size: 80%; color: #AAA; text-decoration: none;}
+
+li.included{background-color: green;}
+li.excluded{background-color: red;}

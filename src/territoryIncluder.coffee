@@ -20,13 +20,15 @@ class TerritoryIncluder extends TerritoryPicker
       event.stopPropagation()
       territory_code = $(event.target).parent().prop('id').replace('territory_', '')
       @_include_territory_recursive(territory_code)
-      # @_all_child_territories(territory_code).prop('checked', false)
+      if parent_code = @_parent_code(territory_code)
+        @_update_inclusion_territory(parent_code)
 
     @element.delegate 'a.exclude', 'click', (event) =>
       event.preventDefault()
       territory_code = $(event.target).parent().prop('id').replace('territory_', '')
       @_exclude_territory_recursive(territory_code)
-
+      if parent_code = @_parent_code(territory_code)
+        @_update_inclusion_territory(parent_code)
 
   _add_territory_id_to_containers: ->
     @element.find('input').each (idx, inputEl) ->
@@ -40,22 +42,56 @@ class TerritoryIncluder extends TerritoryPicker
       excludeEl = $('<a href="#" class="exclude">-</a>')
       el.after includeEl
       el.after excludeEl
-      
+
+  _update_inclusion_territory: (code) ->
+    all = @_all_child_territory_containers(code)
+    included = @_all_child_territory_containers(code, '.included')
+    excluded = @_all_child_territory_containers(code, '.excluded')
+
+    console.log code
+    console.log [all.length,included.length,excluded.length]
+    if all.length == included.length
+      @_include_territory code
+      return
+
+    if all.length == excluded.length
+      @_exclude_territory code
+      return
+
+    @_uninclude_territory code
+    @_unexclude_territory code
+
+  _include_territory: (code) ->
+    @element.find('li#territory_'+code).addClass('included').removeClass('excluded')
+
+  _uninclude_territory: (code) ->
+    @element.find('li#territory_'+code).removeClass('included')
+
   _include_territory_recursive: (code) ->
-    @element.find('li#territory_'+code).addClass('included')
-    @element.find('li#territory_'+code).removeClass('excluded')
+    @_include_territory(code)
     @_all_child_territory_containers(code).each (idx, containerEl) =>
       @_include_territory_recursive($(containerEl).prop('id').replace('territory_', ''))
-      # $(containerEl).addClass('included').removeClass('excluded')
+
+  _exclude_territory: (code) ->
+    @element.find('li#territory_'+code).addClass('excluded').removeClass('included')
+
+  _unexclude_territory: (code) ->
+    @element.find('li#territory_'+code).removeClass('excluded')
 
   _exclude_territory_recursive: (code) ->
-    @element.find('li#territory_'+code).addClass('excluded').removeClass('included')
+    @_exclude_territory(code)
     @_all_child_territory_containers(code).each (idx, containerEl) =>
       @_exclude_territory_recursive($(containerEl).prop('id').replace('territory_', ''))
-      # $(containerEl).addClass('excluded').removeClass('included')
 
-  _all_child_territory_containers: (code) ->
-    @element.find('li#territory_'+code+' > ul.territory_options > li')
+  _all_child_territory_containers: (code, selector) ->
+    selector = '' if selector == undefined
+    @element.find('li#territory_'+code+' > ul.territory_options > li'+selector)
+
+  _parent_code: (code) ->
+    el = @element.find('li#territory_'+code).parent().parent()
+    if el.prop('id').match(/^territory_/)
+      return el.prop('id').replace(/^territory_/, '') 
+    return null
 
   all_included_territory_codes: ->
     @element.find('li.included').map (idx,el) ->

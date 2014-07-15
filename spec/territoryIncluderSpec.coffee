@@ -58,3 +58,13 @@ describe 'TerritoryIncluder', ->
     @$element.find('li#territory_europe > .exclude').trigger('click')
     expect( @$element.territoryIncluder('excluded_territory_codes') ).toEqual ['europe']
     expect( @$element.territoryIncluder('included_territory_codes') ).toEqual []
+
+  it "should remove included/excluded class from parent territory", ->
+    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toBe 0
+    expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toBe 0
+    @$element.find('li#territory_europe > .exclude').trigger('click')
+    expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toEqual 53
+    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 0
+    @$element.find('li#territory_fr > .include').trigger('click')
+    expect( @$element.territoryIncluder('all_included_territory_codes') ).toEqual ['fr']
+    expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toEqual 51
