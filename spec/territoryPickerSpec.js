@@ -4,6 +4,7 @@
     var options;
     options = {};
     beforeEach(function() {
+      jQuery('body').append('<div id="fixtures"></div>');
       return this.$element = $('#fixtures');
     });
     describe('initialization', function() {

@@ -2,7 +2,7 @@ describe 'TerritoryPicker', ->
   options = {}
 
   beforeEach ->
-    # loadFixtures 'fragment.html'
+    jQuery('body').append('<div id="fixtures"></div>')
     @$element = $( '#fixtures' )
 
   describe 'initialization', ->
