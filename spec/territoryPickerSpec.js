@@ -7,6 +7,9 @@
       jQuery('body').append('<div id="fixtures"></div>');
       return this.$element = $('#fixtures');
     });
+    afterEach(function() {
+      return jQuery('#fixtures').remove();
+    });
     describe('initialization', function() {
       beforeEach(function() {
         return this.$element.territoryPicker();
@@ -310,19 +313,19 @@
       });
     });
     describe('data interface', function() {
-      beforeEach(function() {
-        return this.$element.territoryPicker();
-      });
       it('should have a all_checked_territory_codes function', function() {
+        this.$element.territoryPicker();
         expect(this.$element.territoryPicker('all_checked_territory_codes').length).toEqual(252);
         this.$element.find('input[name="territories[world]"]').trigger('click');
         this.$element.find('input[name="territories[be]"]').trigger('click');
         return expect(this.$element.territoryPicker('all_checked_territory_codes')).toEqual(['be']);
       });
       return it('should have a checked_territory_codes function that doesn\'t gives all checked child-territories', function() {
-        expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['be']);
+        this.$element.territoryPicker();
+        expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['world']);
         this.$element.find('input#territory_world').trigger('click');
-        return expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['world']);
+        this.$element.find('input[name="territories[be]"]').trigger('click');
+        return expect(this.$element.territoryPicker('checked_territory_codes')).toEqual(['be']);
       });
     });
     describe('options', function() {

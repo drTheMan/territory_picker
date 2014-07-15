@@ -5,6 +5,9 @@ describe 'TerritoryPicker', ->
     jQuery('body').append('<div id="fixtures"></div>')
     @$element = $( '#fixtures' )
 
+  afterEach ->
+    jQuery('#fixtures').remove()
+
   describe 'initialization', ->
     beforeEach ->
       @$element.territoryPicker()
@@ -315,10 +318,8 @@ describe 'TerritoryPicker', ->
       expect( @$element.find('input:checked').length ).toBe(252)
 
   describe 'data interface', ->
-    beforeEach ->
-      @$element.territoryPicker()
-
     it 'should have a all_checked_territory_codes function', ->
+      @$element.territoryPicker()
       expect( @$element.territoryPicker('all_checked_territory_codes').length ).toEqual( 252 )
       # uncheck all
       @$element.find('input[name="territories[world]"]').trigger('click')
@@ -328,10 +329,13 @@ describe 'TerritoryPicker', ->
       expect( @$element.territoryPicker('all_checked_territory_codes') ).toEqual( ['be'] )
 
     it 'should have a checked_territory_codes function that doesn\'t gives all checked child-territories', ->
-      expect( @$element.territoryPicker('checked_territory_codes') ).toEqual ['be']
-      # check all again
-      @$element.find('input#territory_world').trigger('click')
+      @$element.territoryPicker()
       expect( @$element.territoryPicker('checked_territory_codes') ).toEqual ['world']
+      # uncheck all
+      @$element.find('input#territory_world').trigger('click')
+      # check belgium
+      @$element.find('input[name="territories[be]"]').trigger('click')
+      expect( @$element.territoryPicker('checked_territory_codes') ).toEqual ['be']
 
   describe 'options', ->
     it 'should accept a `checked_territories` options which IS case-sensitive', ->

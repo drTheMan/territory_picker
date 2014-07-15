@@ -547,7 +547,6 @@ class @TerritoryPicker
       world_box = @_checkbox_for_territory_code('world')
       world_box.prop('checked', false)
       @_all_child_territories( world_box ).prop('checked', false)
-
       $.each @options.checked_territories, (index, territory_code) =>
         @_checkbox_for_territory_code(territory_code).prop('checked', true)
 
