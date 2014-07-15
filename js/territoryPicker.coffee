@@ -9,7 +9,7 @@
 root = this
 $ = jQuery
 
-class TerritoryPicker
+class @TerritoryPicker
   defaults:
     territories:
       world:

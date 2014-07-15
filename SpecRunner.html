@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Jasmine Spec Runner</title>
+    <link rel="stylesheet" type="text/css" href="css/jasmine.css">
+    <script src="js/libs/jquery.js"></script>
+    <script src="js/libs/jqueryui.js"></script>
+    <script src="js/libs/jasmine.js"></script>
+    <script src="js/libs/jasmine-html.js"></script>
+    <script src="js/libs/jasmine-jquery.js"></script>
+   
+    <!-- include source files here... -->
+    <script src="js/territoryPicker.js"></script>
+   
+    <!-- include spec files here... -->
+    <script src="spec/javascripts/territoryPickerSpec.js"></script>
+  </head>
+ 
+  <body>
+    <div id="fixtures"></div>
+
+    <script type="text/javascript">
+      (function() {
+        var jasmineEnv = jasmine.getEnv();
+        jasmineEnv.updateInterval = 1000;
+   
+        var trivialReporter = new jasmine.TrivialReporter();
+   
+        jasmineEnv.addReporter(trivialReporter);
+   
+        jasmineEnv.specFilter = function(spec) {
+          return trivialReporter.specFilter(spec);
+        };
+   
+        var currentWindowOnload = window.onload;
+   
+        window.onload = function() {
+          if (currentWindowOnload) {
+            currentWindowOnload();
+          }
+          execJasmine();
+        };
+   
+        function execJasmine() {
+          jasmineEnv.execute();
+        }
+   
+      })();
+    </script>
+  </body>
+</html>

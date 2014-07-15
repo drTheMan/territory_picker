@@ -2,7 +2,7 @@ describe 'TerritoryPicker', ->
   options = {}
 
   beforeEach ->
-    loadFixtures 'fragment.html'
+    # loadFixtures 'fragment.html'
     @$element = $( '#fixtures' )
 
   describe 'initialization', ->
@@ -12,13 +12,13 @@ describe 'TerritoryPicker', ->
     describe 'worldwide option', ->
 
       it 'should generate a \'worldwide?\' checkbox', ->
-        expect( $( 'input#territory_world' ) ).toExist()
+        expect( $( 'input#territory_world' ) ).toBeDefined()
         expect( $( 'input#territory_world' ).prop('type') ).toBe('checkbox')
         expect( $( 'input#territory_world' ).prop('name') ).toBe('territories[world]')
         expect( $( 'input#territory_world' ) ).toBeChecked()
   
       it 'should generate a \'worldwide\' label', ->
-        expect( $( 'label#territory_world_name' ) ).toExist()
+        expect( $( 'label#territory_world_name' ) ).toBeDefined()
         expect( $( 'label#territory_world_name' ).prop('for') ).toBe('territory_world')
         expect( $( 'label#territory_world_name' ).html() ).toBe('World')
 
