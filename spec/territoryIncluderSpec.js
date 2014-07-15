@@ -43,15 +43,14 @@
       return expect(this.$element.find('li.included').length).toBe(252);
     });
     it("should provide a complete list of included/excluded territories", function() {
-      expect(this.$element.territoryIncluder('all_included_territory_codes').length).toBe(0);
-      expect(this.$element.territoryIncluder('all_excluded_territory_codes').length).toBe(0);
+      expect(this.$element.territoryIncluder('all_included_territory_codes')).toEqual([]);
+      expect(this.$element.territoryIncluder('all_excluded_territory_codes')).toEqual([]);
       this.$element.find('li#territory_fr > .include').trigger('click');
-      expect(this.$element.territoryIncluder('all_included_territory_codes').length).toBe(1);
-      expect(this.$element.territoryIncluder('all_included_territory_codes')[0]).toBe('fr');
-      expect(this.$element.territoryIncluder('all_excluded_territory_codes').length).toBe(0);
+      expect(this.$element.territoryIncluder('all_included_territory_codes')).toEqual(['fr']);
+      expect(this.$element.territoryIncluder('all_excluded_territory_codes')).toEqual([]);
       this.$element.find('li#territory_europe > .exclude').trigger('click');
       expect(this.$element.territoryIncluder('all_excluded_territory_codes').length).toBe(53);
-      return expect(this.$element.territoryIncluder('all_included_territory_codes').length).toBe(0);
+      return expect(this.$element.territoryIncluder('all_included_territory_codes')).toEqual([]);
     });
     it("should provide a non-recursive list included/excluded territories", function() {
       expect(this.$element.territoryIncluder('included_territory_codes').length).toBe(0);

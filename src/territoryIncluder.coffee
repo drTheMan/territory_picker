@@ -114,12 +114,16 @@ class TerritoryIncluder extends TerritoryPicker
     return null
 
   all_included_territory_codes: ->
-    @element.find('li.included').map (idx,el) ->
-      $(el).prop('id').replace('territory_', '')
+    result = []
+    @element.find('li.included').each (idx,el) ->
+      result.push $(el).prop('id').replace('territory_', '')
+    return result
 
   all_excluded_territory_codes: ->
-    @element.find('li.excluded').map (idx,el) ->
-      $(el).prop('id').replace('territory_', '')
+    result = []
+    @element.find('li.excluded').each (idx,el) ->
+      result.push $(el).prop('id').replace('territory_', '')
+    return result
 
   included_territory_codes: ->
     result = []

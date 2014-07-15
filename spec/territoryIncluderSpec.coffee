@@ -39,15 +39,14 @@ describe 'TerritoryIncluder', ->
     expect( @$element.find('li.included').length ).toBe 252
 
   it "should provide a complete list of included/excluded territories", ->
-    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toBe 0
-    expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toBe 0
+    expect( @$element.territoryIncluder('all_included_territory_codes') ).toEqual []
+    expect( @$element.territoryIncluder('all_excluded_territory_codes') ).toEqual []
     @$element.find('li#territory_fr > .include').trigger('click')
-    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toBe 1
-    expect( @$element.territoryIncluder('all_included_territory_codes')[0] ).toBe 'fr'
-    expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toBe 0
+    expect( @$element.territoryIncluder('all_included_territory_codes') ).toEqual ['fr']
+    expect( @$element.territoryIncluder('all_excluded_territory_codes') ).toEqual []
     @$element.find('li#territory_europe > .exclude').trigger('click')
     expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toBe 53
-    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toBe 0
+    expect( @$element.territoryIncluder('all_included_territory_codes') ).toEqual []
 
   it "should provide a non-recursive list included/excluded territories", ->
     expect( @$element.territoryIncluder('included_territory_codes').length ).toBe 0

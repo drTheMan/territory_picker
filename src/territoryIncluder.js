@@ -163,15 +163,21 @@
     };
 
     TerritoryIncluder.prototype.all_included_territory_codes = function() {
-      return this.element.find('li.included').map(function(idx, el) {
-        return $(el).prop('id').replace('territory_', '');
+      var result;
+      result = [];
+      this.element.find('li.included').each(function(idx, el) {
+        return result.push($(el).prop('id').replace('territory_', ''));
       });
+      return result;
     };
 
     TerritoryIncluder.prototype.all_excluded_territory_codes = function() {
-      return this.element.find('li.excluded').map(function(idx, el) {
-        return $(el).prop('id').replace('territory_', '');
+      var result;
+      result = [];
+      this.element.find('li.excluded').each(function(idx, el) {
+        return result.push($(el).prop('id').replace('territory_', ''));
       });
+      return result;
     };
 
     TerritoryIncluder.prototype.included_territory_codes = function() {
