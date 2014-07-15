@@ -68,3 +68,12 @@ describe 'TerritoryIncluder', ->
     @$element.find('li#territory_fr > .include').trigger('click')
     expect( @$element.territoryIncluder('all_included_territory_codes') ).toEqual ['fr']
     expect( @$element.territoryIncluder('all_excluded_territory_codes').length ).toEqual 51
+
+  it "should toggle included/excluded", ->
+    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 0
+    @$element.find('li#territory_europe > .include').trigger('click')
+    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 53
+    @$element.find('li#territory_fr > .include').trigger('click')
+    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 51 # both europe and france are now UNincluded
+    @$element.find('li#territory_de > .include').trigger('click')
+    expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 50

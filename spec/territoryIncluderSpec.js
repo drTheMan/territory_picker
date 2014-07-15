@@ -63,7 +63,7 @@
       expect(this.$element.territoryIncluder('excluded_territory_codes')).toEqual(['europe']);
       return expect(this.$element.territoryIncluder('included_territory_codes')).toEqual([]);
     });
-    return it("should remove included/excluded class from parent territory", function() {
+    it("should remove included/excluded class from parent territory", function() {
       expect(this.$element.territoryIncluder('all_included_territory_codes').length).toBe(0);
       expect(this.$element.territoryIncluder('all_excluded_territory_codes').length).toBe(0);
       this.$element.find('li#territory_europe > .exclude').trigger('click');
@@ -72,6 +72,15 @@
       this.$element.find('li#territory_fr > .include').trigger('click');
       expect(this.$element.territoryIncluder('all_included_territory_codes')).toEqual(['fr']);
       return expect(this.$element.territoryIncluder('all_excluded_territory_codes').length).toEqual(51);
+    });
+    return it("should toggle included/excluded", function() {
+      expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(0);
+      this.$element.find('li#territory_europe > .include').trigger('click');
+      expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(53);
+      this.$element.find('li#territory_fr > .include').trigger('click');
+      expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(51);
+      this.$element.find('li#territory_de > .include').trigger('click');
+      return expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(50);
     });
   });
 
