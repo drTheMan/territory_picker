@@ -76,6 +76,40 @@
       return this.element.find('li#territory_' + code + ' > ul.territory_options > li');
     };
 
+    TerritoryIncluder.prototype.all_included_territory_codes = function() {
+      return this.element.find('li.included').map(function(idx, el) {
+        return $(el).prop('id').replace('territory_', '');
+      });
+    };
+
+    TerritoryIncluder.prototype.all_excluded_territory_codes = function() {
+      return this.element.find('li.excluded').map(function(idx, el) {
+        return $(el).prop('id').replace('territory_', '');
+      });
+    };
+
+    TerritoryIncluder.prototype.included_territory_codes = function() {
+      var result;
+      result = [];
+      this.element.find('li.included').each(function(idx, el) {
+        if (!$(el).parent().parent().hasClass('included')) {
+          return result.push($(el).prop('id').replace('territory_', ''));
+        }
+      });
+      return result;
+    };
+
+    TerritoryIncluder.prototype.excluded_territory_codes = function() {
+      var result;
+      result = [];
+      this.element.find('li.excluded').map(function(idx, el) {
+        if (!$(el).parent().parent().hasClass('excluded')) {
+          return result.push($(el).prop('id').replace('territory_', ''));
+        }
+      });
+      return result;
+    };
+
     return TerritoryIncluder;
 
   })(TerritoryPicker);

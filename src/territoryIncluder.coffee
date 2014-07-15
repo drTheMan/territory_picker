@@ -54,9 +54,31 @@ class TerritoryIncluder extends TerritoryPicker
       @_exclude_territory_recursive($(containerEl).prop('id').replace('territory_', ''))
       # $(containerEl).addClass('excluded').removeClass('included')
 
-
   _all_child_territory_containers: (code) ->
     @element.find('li#territory_'+code+' > ul.territory_options > li')
+
+  all_included_territory_codes: ->
+    @element.find('li.included').map (idx,el) ->
+      $(el).prop('id').replace('territory_', '')
+
+  all_excluded_territory_codes: ->
+    @element.find('li.excluded').map (idx,el) ->
+      $(el).prop('id').replace('territory_', '')
+
+  included_territory_codes: ->
+    result = []
+    @element.find('li.included').each (idx,el) ->
+      if !$(el).parent().parent().hasClass('included')
+        result.push $(el).prop('id').replace('territory_', '')
+    return result
+
+  excluded_territory_codes: ->
+    result = []
+    @element.find('li.excluded').map (idx,el) ->
+      if !$(el).parent().parent().hasClass('excluded')
+        result.push $(el).prop('id').replace('territory_', '')
+    return result
+
 
 # register jquery widget
 $.widget 'fuga.territoryIncluder', new TerritoryIncluder
