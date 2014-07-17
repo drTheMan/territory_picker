@@ -101,7 +101,7 @@
 
     TerritoryIncluder.prototype._territory_inclusion_state = function(code) {
       var el;
-      el = this.element.find('li#territory_' + code);
+      el = this.element.find('li#territory_' + code.toLowerCase());
       if (el.hasClass('included')) {
         return 'included';
       }
@@ -112,7 +112,7 @@
     };
 
     TerritoryIncluder.prototype._include_territory = function(code) {
-      return this.element.find('li#territory_' + code).addClass('included').removeClass('excluded');
+      return this.element.find('li#territory_' + code.toLowerCase()).addClass('included').removeClass('excluded');
     };
 
     TerritoryIncluder.prototype._include_territory_recursive = function(code) {
@@ -124,7 +124,7 @@
     };
 
     TerritoryIncluder.prototype._uninclude_territory = function(code) {
-      return this.element.find('li#territory_' + code).removeClass('included');
+      return this.element.find('li#territory_' + code.toLowerCase()).removeClass('included');
     };
 
     TerritoryIncluder.prototype._uninclude_territory_recursive = function(code) {
@@ -136,7 +136,7 @@
     };
 
     TerritoryIncluder.prototype._exclude_territory = function(code) {
-      return this.element.find('li#territory_' + code).addClass('excluded').removeClass('included');
+      return this.element.find('li#territory_' + code.toLowerCase()).addClass('excluded').removeClass('included');
     };
 
     TerritoryIncluder.prototype._exclude_territory_recursive = function(code) {
@@ -148,7 +148,7 @@
     };
 
     TerritoryIncluder.prototype._unexclude_territory = function(code) {
-      return this.element.find('li#territory_' + code).removeClass('excluded');
+      return this.element.find('li#territory_' + code.toLowerCase()).removeClass('excluded');
     };
 
     TerritoryIncluder.prototype._unexclude_territory_recursive = function(code) {
@@ -163,12 +163,12 @@
       if (selector === void 0) {
         selector = '';
       }
-      return this.element.find('li#territory_' + code + ' > ul.territory_options > li' + selector);
+      return this.element.find('li#territory_' + code.toLowerCase() + ' > ul.territory_options > li' + selector);
     };
 
     TerritoryIncluder.prototype._parent_code = function(code) {
       var el;
-      el = this.element.find('li#territory_' + code).parent().parent();
+      el = this.element.find('li#territory_' + code.toLowerCase()).parent().parent();
       if (el.prop('id').match(/^territory_/)) {
         return el.prop('id').replace(/^territory_/, '');
       }

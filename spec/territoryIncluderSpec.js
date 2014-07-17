@@ -88,8 +88,8 @@
       jQuery('body').append('<div id="newFixtures"></div>');
       this.$element = $('#newFixtures');
       this.$element.territoryIncluder({
-        included_territory_codes: ['nl', 'fr'],
-        excluded_territory_codes: ['es', 'au']
+        included_territory_codes: ['nl', 'FR'],
+        excluded_territory_codes: ['es', 'AU']
       });
       expect(this.$element.territoryIncluder('all_included_territory_codes').sort()).toEqual(['nl', 'fr'].sort());
       return expect(this.$element.territoryIncluder('all_excluded_territory_codes').sort()).toEqual(['es', 'au'].sort());
