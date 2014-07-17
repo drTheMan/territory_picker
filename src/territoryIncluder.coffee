@@ -11,30 +11,29 @@ $ = jQuery
 
 class TerritoryIncluder extends TerritoryPicker
   _create: ->
+    # do all territoryPicker initializations
     super()
+
+    # includer customizations
     @_add_territory_id_to_containers()
     @_turn_into_include_options()
 
+    jQuery.each (@options.included_territory_codes || []), (idx, territory_code) =>
+      @_perform_include_on territory_code
+
+    jQuery.each (@options.excluded_territory_codes || []), (idx, territory_code) =>
+      @_perform_exclude_on territory_code
+
+    # event hooks
     @element.delegate 'a.include', 'click', (event) =>
       event.preventDefault()
       event.stopPropagation()
-      territory_code = $(event.target).parent().prop('id').replace('territory_', '')
-      if @_territory_inclusion_state(territory_code) == 'included'
-        @_uninclude_territory_recursive territory_code
-      else
-        @_include_territory_recursive(territory_code)
-      if parent_code = @_parent_code(territory_code)
-        @_update_inclusion_territory(parent_code)
+      @_perform_include_on $(event.target).parent().prop('id').replace('territory_', '')
 
     @element.delegate 'a.exclude', 'click', (event) =>
       event.preventDefault()
-      territory_code = $(event.target).parent().prop('id').replace('territory_', '')
-      if @_territory_inclusion_state(territory_code) == 'excluded'
-        @_unexclude_territory_recursive territory_code   
-      else
-        @_exclude_territory_recursive(territory_code)
-      if parent_code = @_parent_code(territory_code)
-        @_update_inclusion_territory(parent_code)
+      event.stopPropagation()
+      @_perform_exclude_on $(event.target).parent().prop('id').replace('territory_', '')
 
   _add_territory_id_to_containers: ->
     @element.find('input').each (idx, inputEl) ->
@@ -48,6 +47,24 @@ class TerritoryIncluder extends TerritoryPicker
       excludeEl = $('<a href="#" class="exclude">-</a>')
       el.after includeEl
       el.after excludeEl
+
+  _perform_include_on: (territory_code) ->
+    if @_territory_inclusion_state(territory_code) == 'included'
+      @_uninclude_territory_recursive territory_code
+    else
+      @_include_territory_recursive(territory_code)
+    if parent_code = @_parent_code(territory_code)
+      @_update_inclusion_territory(parent_code)
+
+  _perform_exclude_on: (territory_code) ->
+    if @_territory_inclusion_state(territory_code) == 'excluded'
+      @_unexclude_territory_recursive territory_code   
+    else
+      @_exclude_territory_recursive(territory_code)
+    if parent_code = @_parent_code(territory_code)
+      @_update_inclusion_territory(parent_code)
+
+
 
   _update_inclusion_territory: (code) ->
     all = @_all_child_territory_containers(code)

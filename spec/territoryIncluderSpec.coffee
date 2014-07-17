@@ -7,7 +7,7 @@ describe 'TerritoryIncluder', ->
     @$element.territoryIncluder()
 
   afterEach ->
-    jQuery('#fixtures').remove()
+    @$element.remove()
 
   it "should add include/exclude buttons to each territory", ->
     @$element.find('input').each (idx, inputEl) ->
@@ -76,3 +76,21 @@ describe 'TerritoryIncluder', ->
     expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 51 # both europe and france are now UNincluded
     @$element.find('li#territory_de > .include').trigger('click')
     expect( @$element.territoryIncluder('all_included_territory_codes').length ).toEqual 50
+
+  it "should accept included_territory_codes/excluded_territory_codes options", ->
+    expect( @$element.territoryIncluder('all_included_territory_codes') ).toEqual []
+    expect( @$element.territoryIncluder('all_excluded_territory_codes') ).toEqual []
+    
+    @$element.remove()
+    jQuery('body').append('<div id="newFixtures"></div>')
+    @$element = $( '#newFixtures' )
+    @$element.territoryIncluder(included_territory_codes: ['nl', 'fr'], excluded_territory_codes: ['es', 'au'])
+
+    expect( @$element.territoryIncluder('all_included_territory_codes').sort() ).toEqual ['nl', 'fr'].sort()
+    expect( @$element.territoryIncluder('all_excluded_territory_codes').sort() ).toEqual ['es', 'au'].sort()
+
+
+
+
+
+

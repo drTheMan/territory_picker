@@ -21,32 +21,21 @@
       TerritoryIncluder.__super__._create.call(this);
       this._add_territory_id_to_containers();
       this._turn_into_include_options();
+      jQuery.each(this.options.included_territory_codes || [], function(idx, territory_code) {
+        return _this._perform_include_on(territory_code);
+      });
+      jQuery.each(this.options.excluded_territory_codes || [], function(idx, territory_code) {
+        return _this._perform_exclude_on(territory_code);
+      });
       this.element.delegate('a.include', 'click', function(event) {
-        var parent_code, territory_code;
         event.preventDefault();
         event.stopPropagation();
-        territory_code = $(event.target).parent().prop('id').replace('territory_', '');
-        if (_this._territory_inclusion_state(territory_code) === 'included') {
-          _this._uninclude_territory_recursive(territory_code);
-        } else {
-          _this._include_territory_recursive(territory_code);
-        }
-        if (parent_code = _this._parent_code(territory_code)) {
-          return _this._update_inclusion_territory(parent_code);
-        }
+        return _this._perform_include_on($(event.target).parent().prop('id').replace('territory_', ''));
       });
       return this.element.delegate('a.exclude', 'click', function(event) {
-        var parent_code, territory_code;
         event.preventDefault();
-        territory_code = $(event.target).parent().prop('id').replace('territory_', '');
-        if (_this._territory_inclusion_state(territory_code) === 'excluded') {
-          _this._unexclude_territory_recursive(territory_code);
-        } else {
-          _this._exclude_territory_recursive(territory_code);
-        }
-        if (parent_code = _this._parent_code(territory_code)) {
-          return _this._update_inclusion_territory(parent_code);
-        }
+        event.stopPropagation();
+        return _this._perform_exclude_on($(event.target).parent().prop('id').replace('territory_', ''));
       });
     };
 
@@ -67,6 +56,30 @@
         el.after(includeEl);
         return el.after(excludeEl);
       });
+    };
+
+    TerritoryIncluder.prototype._perform_include_on = function(territory_code) {
+      var parent_code;
+      if (this._territory_inclusion_state(territory_code) === 'included') {
+        this._uninclude_territory_recursive(territory_code);
+      } else {
+        this._include_territory_recursive(territory_code);
+      }
+      if (parent_code = this._parent_code(territory_code)) {
+        return this._update_inclusion_territory(parent_code);
+      }
+    };
+
+    TerritoryIncluder.prototype._perform_exclude_on = function(territory_code) {
+      var parent_code;
+      if (this._territory_inclusion_state(territory_code) === 'excluded') {
+        this._unexclude_territory_recursive(territory_code);
+      } else {
+        this._exclude_territory_recursive(territory_code);
+      }
+      if (parent_code = this._parent_code(territory_code)) {
+        return this._update_inclusion_territory(parent_code);
+      }
     };
 
     TerritoryIncluder.prototype._update_inclusion_territory = function(code) {

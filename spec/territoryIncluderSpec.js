@@ -9,7 +9,7 @@
       return this.$element.territoryIncluder();
     });
     afterEach(function() {
-      return jQuery('#fixtures').remove();
+      return this.$element.remove();
     });
     it("should add include/exclude buttons to each territory", function() {
       return this.$element.find('input').each(function(idx, inputEl) {
@@ -72,7 +72,7 @@
       expect(this.$element.territoryIncluder('all_included_territory_codes')).toEqual(['fr']);
       return expect(this.$element.territoryIncluder('all_excluded_territory_codes').length).toEqual(51);
     });
-    return it("should toggle included/excluded", function() {
+    it("should toggle included/excluded", function() {
       expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(0);
       this.$element.find('li#territory_europe > .include').trigger('click');
       expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(53);
@@ -80,6 +80,19 @@
       expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(51);
       this.$element.find('li#territory_de > .include').trigger('click');
       return expect(this.$element.territoryIncluder('all_included_territory_codes').length).toEqual(50);
+    });
+    return it("should accept included_territory_codes/excluded_territory_codes options", function() {
+      expect(this.$element.territoryIncluder('all_included_territory_codes')).toEqual([]);
+      expect(this.$element.territoryIncluder('all_excluded_territory_codes')).toEqual([]);
+      this.$element.remove();
+      jQuery('body').append('<div id="newFixtures"></div>');
+      this.$element = $('#newFixtures');
+      this.$element.territoryIncluder({
+        included_territory_codes: ['nl', 'fr'],
+        excluded_territory_codes: ['es', 'au']
+      });
+      expect(this.$element.territoryIncluder('all_included_territory_codes').sort()).toEqual(['nl', 'fr'].sort());
+      return expect(this.$element.territoryIncluder('all_excluded_territory_codes').sort()).toEqual(['es', 'au'].sort());
     });
   });
 
